@@ -3,7 +3,7 @@
 #include "Errors.h"
 #include <iostream>
 #include <string>
-#include "ImageLoader.h"
+
 
 
 
@@ -29,7 +29,7 @@ void MainGame::run()
 	//big quad
 	_sprite.init(-1.0f,-1.0f, 2.0f,2.0f);
 
-	_playerTexture = ImageLoader::LoadPNG("Textures/jimmyJump_pack/PNG/CharacterRight_Standing.png");
+	//_playerTexture = ImageLoader::LoadPNG("Textures/jimmyJump_pack/PNG/CharacterRight_Standing.png");
 	gameLoop();
 }
 void MainGame::initSystems()

@@ -17,7 +17,7 @@ Sprite::~Sprite()
 	}
 }
 
-void Sprite::init(float x, float y, int width, int height)
+void Sprite::init(float x, float y, int width, int height, std::string texturePath)
 {
 	_x = x;
 	_y = y;
