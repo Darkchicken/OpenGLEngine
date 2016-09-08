@@ -7,12 +7,13 @@
 
 
 
-MainGame::MainGame():
+MainGame::MainGame() :
 	_time(0.0f),
 	_window(nullptr),
 	_screenWidth(1024),
 	_screenHeight(768),
-	_gameState(GameState::PLAY)
+	_gameState(GameState::PLAY),
+	_maxFPS(60)
 {
 	
 	
@@ -42,6 +43,12 @@ void MainGame::initSystems()
 {
 	//initialize SDL
 	SDL_Init(SDL_INIT_EVERYTHING);
+
+	//makes it so you have 2 windows, one you draw to while you clear the other
+	//prevents flickering
+	SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);
+
+
 	//Creates Window
 	_window = SDL_CreateWindow("Game Engine",SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED,_screenWidth, _screenHeight,SDL_WINDOW_OPENGL);
 	if (_window == nullptr)
@@ -61,12 +68,15 @@ void MainGame::initSystems()
 	{
 		fatalError("Could not initialize GLEW!");
 	}
-	//makes it so you have 2 windows, one you draw to while you clear the other
-	//prevents flickering
-	SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER,1);
+	
+	//Check openGL version and display it
+	std::printf("***	OpenGL Version: %s	***",glGetString(GL_VERSION));
 
 	//set background color
 	glClearColor(0.0f,0.0f,1.0f,1.0f);
+
+	//enable VSYNC (1 is on, 0 is off)
+	SDL_GL_SetSwapInterval(1);
 
 	initShaders();
 }
@@ -86,6 +96,8 @@ void MainGame::gameLoop()
 {
 	while (_gameState != GameState::EXIT)
 	{
+		//use for frame time measuring
+		float startTicks = SDL_GetTicks();
 
 		processInput();
 
@@ -93,6 +105,27 @@ void MainGame::gameLoop()
 		_time += 0.01f;
 
 		drawGame();
+		//calculate frames per second
+		calculateFPS();
+		//print only once every 10 frames
+		static int frameCounter = 0;
+		frameCounter++;
+		if (frameCounter == 10)
+		{
+			std::cout << _fps << std::endl;
+			frameCounter = 0;
+		}
+
+		//time it took to run code in game loop
+		float frameTicks = SDL_GetTicks() - startTicks;
+
+		//limit FPS to max fps
+		// ms/s divided by f/s = ms/f
+		if (1000.0f / _maxFPS > frameTicks)
+		{
+			SDL_Delay(1000.0f / _maxFPS - frameTicks);
+		}
+		
 
 	}
 }
@@ -173,9 +206,16 @@ void MainGame::calculateFPS()
 	currentTicks = SDL_GetTicks();
 
 	_frameTime = currentTicks - previousTicks;
-	frameTimes[currentFrame % NUM_SAMPLES];
+	frameTimes[currentFrame % NUM_SAMPLES] = _frameTime;
+
+	//set prev ticks to current ticks for next iteration
+	previousTicks = currentTicks;
 
 	int count;
+
+	//increment current frame
+	currentFrame++;
+
 
 	if (currentFrame < NUM_SAMPLES)
 	{
@@ -185,9 +225,28 @@ void MainGame::calculateFPS()
 	{
 		count = NUM_SAMPLES;
 	}
-
+	//on each call to CalculateFPS, set frameTimeAverage to 0...
 	float frameTimeAverage = 0;
+	//then add all frame times together...
+	for (int i = 0; i < count; i++)
+	{
+		frameTimeAverage += frameTimes[i];
+	}
+	//and average them
+	frameTimeAverage /= count;
 
+	//then calculate frames per second
+	if (frameTimeAverage > 0)
+	{
+		//convert frame time to f/s
+		_fps = 1000.0f / frameTimeAverage;
+	}
+	else
+	{
+		_fps = 60.0f;
+	}
+
+	
 
 }
 

@@ -38,11 +38,12 @@ private:
 
 	GLSLProgram _colorProgram;
 
-	float _FPS;
+	float _fps;
 	float _frameTime;
 	
 
 	float _time;
+	float _maxFPS;
 
 };
 
