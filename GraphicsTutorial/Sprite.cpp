@@ -1,5 +1,6 @@
 #include "Sprite.h"
 #include "Vertex.h"
+#include "ResourceManager.h"
 
 #include <cstddef>
 Sprite::Sprite()
@@ -23,6 +24,8 @@ void Sprite::init(float x, float y, int width, int height, std::string texturePa
 	_y = y;
 	_width = width;
 	_height = height;
+
+	_texture = ResourceManager::getTexture(texturePath);
 
 	//check if vertex buffer id has not been allocated
 	if (_vboID == 0)
@@ -74,6 +77,9 @@ void Sprite::init(float x, float y, int width, int height, std::string texturePa
 
 void Sprite::draw()
 {
+	//bind texture of this sprite
+	glBindTexture(GL_TEXTURE_2D, _texture.id);
+
 	//set a buffer active
 	glBindBuffer(GL_ARRAY_BUFFER, _vboID);
 	//send on vertex attrib array for position, 0 is for first element

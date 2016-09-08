@@ -26,9 +26,15 @@ MainGame::~MainGame()
 void MainGame::run()
 {
 	initSystems();
-	//big quad
-	_sprite.init(-1.0f,-1.0f, 2.0f,2.0f);
 
+	_sprites.push_back(new Sprite());
+	_sprites.back()->init(-1.0f, -1.0f, 1.0f, 1.0f, "Textures/jimmyJump_pack/PNG/CharacterRight_Standing.png");
+	
+	_sprites.push_back(new Sprite());
+	_sprites.back()->init(0.0f, -1.0f, 1.0f, 1.0f, "Textures/jimmyJump_pack/PNG/CharacterRight_Standing.png");
+
+	_sprites.push_back(new Sprite());
+	_sprites.back()->init(-1.0f, 0.0f, 1.0f, 1.0f, "Textures/jimmyJump_pack/PNG/CharacterRight_Standing.png");
 	//_playerTexture = ImageLoader::LoadPNG("Textures/jimmyJump_pack/PNG/CharacterRight_Standing.png");
 	gameLoop();
 }
@@ -105,7 +111,7 @@ void MainGame::processInput()
 				_gameState = GameState::EXIT;
 				break;
 			case SDL_MOUSEMOTION:
-				std::cout << evnt.motion.x << " " << evnt.motion.y << std::endl;
+				//std::cout << evnt.motion.x << " " << evnt.motion.y << std::endl;
 				break;
 		}
 	}
@@ -130,8 +136,7 @@ void MainGame::drawGame()
 	_colorProgram.use();
 
 	glActiveTexture(GL_TEXTURE0);
-	//bind texture to indicated texture
-	glBindTexture(GL_TEXTURE_2D, _playerTexture.id);
+	
 	GLint textureLocation = _colorProgram.getUniformLocation("mySampler");
 	//tells it we are using gl_texture0
 	glUniform1i(textureLocation, 0);
@@ -139,9 +144,11 @@ void MainGame::drawGame()
 	GLuint timeLocation = _colorProgram.getUniformLocation("time");
 
 	glUniform1f(timeLocation, _time);
-
-	_sprite.draw();
-
+	for (int i = 0; i < _sprites.size(); i++)
+	{
+		_sprites[i]->draw();
+	}
+	
 	//unbind texture
 	glBindTexture(GL_TEXTURE_2D,0);
 
@@ -149,4 +156,39 @@ void MainGame::drawGame()
 
 	SDL_GL_SwapWindow(_window);
 }
+
+//calculates the frames per second
+void MainGame::calculateFPS()
+{
+	//number of frames to average
+	static const int NUM_SAMPLES = 10;
+	//constant num samples because you get an error without it
+	static float frameTimes[NUM_SAMPLES];
+	//where are you in frametimes buffer
+	static int currentFrame = 0;
+
+	//get current ticks, previous ticks
+	static float previousTicks = SDL_GetTicks();
+	float currentTicks;
+	currentTicks = SDL_GetTicks();
+
+	_frameTime = currentTicks - previousTicks;
+	frameTimes[currentFrame % NUM_SAMPLES];
+
+	int count;
+
+	if (currentFrame < NUM_SAMPLES)
+	{
+		count = currentFrame;
+	}
+	else
+	{
+		count = NUM_SAMPLES;
+	}
+
+	float frameTimeAverage = 0;
+
+
+}
+
 
