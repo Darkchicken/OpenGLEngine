@@ -74,6 +74,10 @@
     <IncludePath>$(SolutionDir)deps/include/;$(IncludePath)</IncludePath>
     <LibraryPath>$(SolutionDir)deps/lib/;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <IncludePath>$(SolutionDir)deps/include/;$(IncludePath)</IncludePath>
+    <LibraryPath>$(SolutionDir)deps/lib/;$(LibraryPath)</LibraryPath>
+  </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
       <PrecompiledHeader>
@@ -104,6 +108,9 @@
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
     </Link>
+    <Lib>
+      <AdditionalDependencies>SDL2.lib;SDL2main.lib;opengl32.lib;glew32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+    </Lib>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <ClCompile>
@@ -145,6 +152,7 @@
     <Text Include="ReadMe.txt" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Camera2D.cpp" />
     <ClCompile Include="Errors.cpp" />
     <ClCompile Include="GameEngine.cpp" />
     <ClCompile Include="GLSLProgram.cpp" />
@@ -157,6 +165,7 @@
     <ClCompile Include="Window.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Camera2D.h" />
     <ClInclude Include="Errors.h" />
     <ClInclude Include="GameEngine.h" />
     <ClInclude Include="GLSLProgram.h" />
