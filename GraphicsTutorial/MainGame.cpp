@@ -70,7 +70,7 @@ void MainGame::initSystems()
 	}
 	
 	//Check openGL version and display it
-	std::printf("***	OpenGL Version: %s	***",glGetString(GL_VERSION));
+	std::printf("***	OpenGL Version: %s	***\n",glGetString(GL_VERSION));
 
 	//set background color
 	glClearColor(0.0f,0.0f,1.0f,1.0f);
