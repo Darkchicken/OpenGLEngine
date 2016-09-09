@@ -1,9 +1,11 @@
 #include "ResourceManager.h"
-
-//have to declare static variables again
-TextureCache ResourceManager::_textureCache;
-
-GLTexture ResourceManager::getTexture(std::string texturePath)
+namespace GameEngine
 {
-	return _textureCache.getTexture(texturePath);
+	//have to declare static variables again
+	TextureCache ResourceManager::_textureCache;
+
+	GLTexture ResourceManager::getTexture(std::string texturePath)
+	{
+		return _textureCache.getTexture(texturePath);
+	}
 }

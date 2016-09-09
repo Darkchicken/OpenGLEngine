@@ -1,10 +1,14 @@
 #pragma once
 
 #include <GL/glew.h>
-struct GLTexture
+
+namespace GameEngine
 {
-	GLuint id;
-	//get dimensions of texture
-	int width;
-	int height;
-};
+	struct GLTexture
+	{
+		GLuint id;
+		//get dimensions of texture
+		int width;
+		int height;
+	};
+}

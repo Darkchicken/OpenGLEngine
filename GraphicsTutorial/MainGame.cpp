@@ -1,6 +1,10 @@
 #include "MainGame.h"
-#include "Sprite.h"
-#include "Errors.h"
+
+
+#include <GameEngine/Sprite.h>
+#include <GameEngine/Errors.h>
+#include <GameEngine/GameEngine.h>
+
 #include <iostream>
 #include <string>
 
@@ -9,7 +13,6 @@
 
 MainGame::MainGame() :
 	_time(0.0f),
-	_window(nullptr),
 	_screenWidth(1024),
 	_screenHeight(768),
 	_gameState(GameState::PLAY),
@@ -28,55 +31,23 @@ void MainGame::run()
 {
 	initSystems();
 
-	_sprites.push_back(new Sprite());
+	_sprites.push_back(new GameEngine::Sprite());
 	_sprites.back()->init(-1.0f, -1.0f, 1.0f, 1.0f, "Textures/jimmyJump_pack/PNG/CharacterRight_Standing.png");
 	
-	_sprites.push_back(new Sprite());
+	_sprites.push_back(new GameEngine::Sprite());
 	_sprites.back()->init(0.0f, -1.0f, 1.0f, 1.0f, "Textures/jimmyJump_pack/PNG/CharacterRight_Standing.png");
 
-	_sprites.push_back(new Sprite());
+	_sprites.push_back(new GameEngine::Sprite());
 	_sprites.back()->init(-1.0f, 0.0f, 1.0f, 1.0f, "Textures/jimmyJump_pack/PNG/CharacterRight_Standing.png");
 	//_playerTexture = ImageLoader::LoadPNG("Textures/jimmyJump_pack/PNG/CharacterRight_Standing.png");
 	gameLoop();
 }
 void MainGame::initSystems()
 {
-	//initialize SDL
-	SDL_Init(SDL_INIT_EVERYTHING);
+	GameEngine::init();
 
-	//makes it so you have 2 windows, one you draw to while you clear the other
-	//prevents flickering
-	SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);
-
-
-	//Creates Window
-	_window = SDL_CreateWindow("Game Engine",SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED,_screenWidth, _screenHeight,SDL_WINDOW_OPENGL);
-	if (_window == nullptr)
-	{
-		fatalError("SDL window could not be opened!");
-	}
-
-	SDL_GLContext glContext = SDL_GL_CreateContext(_window);
-	if (glContext == nullptr)
-	{
-		fatalError("SDL GL Context could not be created!");
-	}
-	//set up glew
-	GLenum error = glewInit();
-
-	if (error != GLEW_OK)
-	{
-		fatalError("Could not initialize GLEW!");
-	}
-	
-	//Check openGL version and display it
-	std::printf("***	OpenGL Version: %s	***\n",glGetString(GL_VERSION));
-
-	//set background color
-	glClearColor(0.0f,0.0f,1.0f,1.0f);
-
-	//enable VSYNC (1 is on, 0 is off)
-	SDL_GL_SetSwapInterval(1);
+	//create game window
+	_window.create("Game Engine", _screenWidth, _screenHeight, GameEngine::FULLSCREEN);
 
 	initShaders();
 }
@@ -187,7 +158,7 @@ void MainGame::drawGame()
 
 	_colorProgram.unuse();
 
-	SDL_GL_SwapWindow(_window);
+	_window.swapBuffer();
 }
 
 //calculates the frames per second

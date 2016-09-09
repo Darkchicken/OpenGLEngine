@@ -1,35 +1,39 @@
 #pragma once
 #include <string>
 #include <GL/glew.h>
-class GLSLProgram
+
+namespace GameEngine
 {
-public:
-	GLSLProgram();
-	~GLSLProgram();
+	class GLSLProgram
+	{
+	public:
+		GLSLProgram();
+		~GLSLProgram();
 
-	void compileShaders(const std::string& vertexShaderFilePath,const std::string& fragmentShaderFilePath);
-	
-	void linkShaders();
+		void compileShaders(const std::string& vertexShaderFilePath, const std::string& fragmentShaderFilePath);
 
-	void addAttribute(const std::string& attributeName);
+		void linkShaders();
 
-	GLint getUniformLocation(const std::string uniformName);
+		void addAttribute(const std::string& attributeName);
 
-	void use();
+		GLint getUniformLocation(const std::string uniformName);
 
-	void unuse();
+		void use();
 
-private:
+		void unuse();
 
-	int _numAttributes;
+	private:
 
-	void compileShader(const std::string filePath, GLuint shaderID);
-	//id that refers to entire program
-	GLuint _programID;
+		int _numAttributes;
 
-	GLuint _vertexShaderID;
-	GLuint _fragmentShaderID;
+		void compileShader(const std::string filePath, GLuint shaderID);
+		//id that refers to entire program
+		GLuint _programID;
 
-	
-};
+		GLuint _vertexShaderID;
+		GLuint _fragmentShaderID;
+
+
+	};
+}
 

@@ -2,9 +2,12 @@
 
 #include <SDL/SDL.h>
 #include <Gl/glew.h>
-#include "Sprite.h"
-#include "GLSLProgram.h"
-#include "GLTexture.h"
+
+#include <GameEngine/Sprite.h>
+#include <GameEngine/GLSLProgram.h>
+#include <GameEngine/GLTexture.h>
+#include <GameEngine/Window.h>
+
 #include <vector>
 
 enum class GameState {PLAY, EXIT};
@@ -27,16 +30,16 @@ private:
 
 	void calculateFPS();
 	
-	SDL_Window* _window;
+	GameEngine::Window _window;
 	int _screenWidth;
 	int _screenHeight;
 
 	GameState _gameState;
 	//vector of sprite pointers
-	std::vector<Sprite*> _sprites;
+	std::vector<GameEngine::Sprite*> _sprites;
 	
 
-	GLSLProgram _colorProgram;
+	GameEngine::GLSLProgram _colorProgram;
 
 	float _fps;
 	float _frameTime;

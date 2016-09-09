@@ -1,13 +1,15 @@
 #pragma once
 #include "TextureCache.h"
 #include <string>
-class ResourceManager
+namespace GameEngine
 {
-public:
-	static GLTexture getTexture(std::string texturePath);
-	
-	
-private: 
-	static TextureCache _textureCache;
-};
+	class ResourceManager
+	{
+	public:
+		static GLTexture getTexture(std::string texturePath);
 
+
+	private:
+		static TextureCache _textureCache;
+	};
+}

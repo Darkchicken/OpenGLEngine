@@ -2,28 +2,30 @@
 #include <GL/glew.h>
 #include "GLTexture.h"
 #include <string>
-
-class Sprite
+namespace GameEngine
 {
-public:
-	Sprite();
-	~Sprite();
+	class Sprite
+	{
+	public:
+		Sprite();
+		~Sprite();
 
-	void init(float x, float y, int width, int height, std::string texturePath);
+		void init(float x, float y, int width, int height, std::string texturePath);
 
-	void draw();
+		void draw();
 
-private:
-	int _x;
-	int _y;
-	int _width;
-	int _height;
-	//GL unsigned in guaranteed to be 32 bits
-	GLuint _vboID;
+	private:
+		int _x;
+		int _y;
+		int _width;
+		int _height;
+		//GL unsigned in guaranteed to be 32 bits
+		GLuint _vboID;
 
-	//texture info
-	GLTexture _texture;
+		//texture info
+		GLTexture _texture;
 
-	
-};
+
+	};
+}
 
