@@ -7,6 +7,7 @@
 #include <GameEngine/GLSLProgram.h>
 #include <GameEngine/GLTexture.h>
 #include <GameEngine/Window.h>
+#include <GameEngine/Camera2D.h>
 
 #include <vector>
 
@@ -40,6 +41,7 @@ private:
 	
 
 	GameEngine::GLSLProgram _colorProgram;
+	GameEngine::Camera2D _camera;
 
 	float _fps;
 	float _frameTime;

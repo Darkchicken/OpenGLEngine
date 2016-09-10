@@ -17,6 +17,7 @@ uniform float time;
 //textures are samplers
 uniform sampler2D mySampler;
 
+
 void main()
 {
 	//look up texture "mySampler" and coordinates from fragmentUV

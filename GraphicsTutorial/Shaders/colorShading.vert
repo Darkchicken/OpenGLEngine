@@ -12,13 +12,14 @@ in vec2 vertexUV;
 out vec2 fragmentPosition;
 //output for color, must match input on fragment shader
 out vec4 fragmentColor;
-
 out vec2 fragmentUV;
+
+uniform mat4 P;
 
 void main()
 {
 	//set the x,y position on the screen
-	gl_Position.xy = vertexPosition;
+	gl_Position.xy = (P * vec4(vertexPosition,0.0, 1.0)).xy;
 	//the z position is zero since we are in 2d
 	gl_Position.z = 0.0;
 	
