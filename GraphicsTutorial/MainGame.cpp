@@ -18,8 +18,13 @@ MainGame::MainGame() :
 	_gameState(GameState::PLAY),
 	_maxFPS(60.0f)
 {
+<<<<<<< HEAD
 	_camera.init(_screenWidth, _screenHeight);
 	
+=======
+	//initialize camera
+	_camera.init(_screenWidth, _screenHeight);
+>>>>>>> origin/master
 }
 
 
@@ -30,6 +35,7 @@ MainGame::~MainGame()
 void MainGame::run()
 {
 	initSystems();
+<<<<<<< HEAD
 	
 	_sprites.push_back(new GameEngine::Sprite());
 	_sprites.back()->init(0.0f, 0.0f, _screenWidth/2, _screenWidth / 2, "Textures/jimmyJump_pack/PNG/CharacterRight_Standing.png");
@@ -37,6 +43,15 @@ void MainGame::run()
 	_sprites.push_back(new GameEngine::Sprite());
 	_sprites.back()->init(_screenWidth / 2, 0.0f, _screenWidth / 2, _screenWidth/2, "Textures/jimmyJump_pack/PNG/CharacterRight_Standing.png");
 	
+=======
+
+	_sprites.push_back(new GameEngine::Sprite());
+	_sprites.back()->init(0.0f, 0.0f, _screenWidth/2, _screenWidth / 2, "Textures/jimmyJump_pack/PNG/CharacterRight_Standing.png");
+	
+	_sprites.push_back(new GameEngine::Sprite());
+	_sprites.back()->init(_screenWidth / 2, 0.0f, _screenWidth / 2, _screenWidth / 2, "Textures/jimmyJump_pack/PNG/CharacterRight_Standing.png");
+
+>>>>>>> origin/master
 	
 	//_playerTexture = ImageLoader::LoadPNG("Textures/jimmyJump_pack/PNG/CharacterRight_Standing.png");
 	gameLoop();
@@ -73,6 +88,8 @@ void MainGame::gameLoop()
 
 		//increment time variable
 		_time += 0.01f;
+		//update camera
+		_camera.update();
 
 		//update camera
 		_camera.update();
@@ -125,6 +142,7 @@ void MainGame::processInput()
 				//std::cout << evnt.motion.x << " " << evnt.motion.y << std::endl;
 				break;
 			case SDL_KEYDOWN:
+<<<<<<< HEAD
 				switch (evnt.key.keysym.sym) {
 					//Get the input and use it to move the camera
 					//THIS IS TEMPORARY
@@ -146,6 +164,30 @@ void MainGame::processInput()
 				case SDLK_e:
 					_camera.setScale(_camera.getScale() - SCALE_SPEED);
 					break;
+=======
+				switch (evnt.key.keysym.sym)
+				{
+					case SDLK_w:
+						_camera.setPosition(_camera.getPosition() + glm::vec2(0.0, CAMERA_SPEED));
+						break;
+					case SDLK_s:
+						_camera.setPosition(_camera.getPosition() + glm::vec2(0.0, -CAMERA_SPEED));
+						break;
+					case SDLK_a:
+						_camera.setPosition(_camera.getPosition() + glm::vec2(CAMERA_SPEED, 0.0));
+						break;
+					case SDLK_d:
+						_camera.setPosition(_camera.getPosition() + glm::vec2(-CAMERA_SPEED, 0.0));
+						break;
+					case SDLK_q://zoom out
+						_camera.setScale(_camera.getScale() + SCALE_SPEED);
+						break;
+					case SDLK_e://zoom in
+						_camera.setScale(_camera.getScale() - SCALE_SPEED);
+						break;
+
+
+>>>>>>> origin/master
 				}
 				break;
 		}
@@ -175,7 +217,18 @@ void MainGame::drawGame()
 	GLint textureLocation = _colorProgram.getUniformLocation("mySampler");
 	//tells it we are using gl_texture0
 	glUniform1i(textureLocation, 0);
+	
 
+
+	GLint timeLocation = _colorProgram.getUniformLocation("time");
+	glUniform1i(timeLocation, _time);
+
+
+	//set the camera matrix
+	GLint pLocation = _colorProgram.getUniformLocation("P");
+	glm::mat4 cameraMatrix = _camera.getCameraMatrix();
+
+<<<<<<< HEAD
 	GLint timeLocation = _colorProgram.getUniformLocation("time");
 
 	glUniform1f(timeLocation, _time);
@@ -188,6 +241,11 @@ void MainGame::drawGame()
 
 
 
+=======
+	//upload matrix to gpu
+	glUniformMatrix4fv(pLocation, 1, GL_FALSE, &(cameraMatrix[0][0]));
+
+>>>>>>> origin/master
 	for (int i = 0; i < _sprites.size(); i++)
 	{
 		_sprites[i]->draw();

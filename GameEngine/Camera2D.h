@@ -10,13 +10,21 @@ namespace GameEngine
 		Camera2D();
 		~Camera2D();
 		//initialize camera
+<<<<<<< HEAD
 		void init(int screenWidth, int screenheight);
+=======
+		void init(int _screenWidth, int _screenheight);
+>>>>>>> origin/master
 		//update camera/matrix
 		void update();
 
 		//setters (when these are changed, update matrix)
 		void setPosition(const glm::vec2& newPosition) { _position = newPosition; _needsMatrixUpdate = true; }
+<<<<<<< HEAD
 		void setScale(float newScale) { _scale = newScale; _needsMatrixUpdate = true; };
+=======
+		void setScale(float newScale) { _scale = newScale; _needsMatrixUpdate = true;};
+>>>>>>> origin/master
 
 		//getters
 		glm::vec2 getPosition() { return _position; };
@@ -36,4 +44,7 @@ namespace GameEngine
 }
 
 
+<<<<<<< HEAD
 
+=======
+>>>>>>> origin/master
