@@ -9,6 +9,8 @@
 #include <GameEngine/Window.h>
 #include <GameEngine/Camera2D.h>
 
+#include <GameEngine/SpriteBatch.h>
+
 #include <vector>
 
 enum class GameState {PLAY, EXIT};
@@ -36,12 +38,12 @@ private:
 	int _screenHeight;
 
 	GameState _gameState;
-	//vector of sprite pointers
-	std::vector<GameEngine::Sprite*> _sprites;
 	
 
 	GameEngine::GLSLProgram _colorProgram;
 	GameEngine::Camera2D _camera;
+
+	GameEngine::SpriteBatch _spriteBatch;
 
 	float _fps;
 	float _frameTime;

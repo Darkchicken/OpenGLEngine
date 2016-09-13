@@ -4,6 +4,7 @@
 #include <GameEngine/Sprite.h>
 #include <GameEngine/Errors.h>
 #include <GameEngine/GameEngine.h>
+#include <GameEngine/ResourceManager.h>
 
 #include <iostream>
 #include <string>
@@ -31,14 +32,6 @@ MainGame::~MainGame()
 void MainGame::run()
 {
 	initSystems();
-
-	
-	_sprites.push_back(new GameEngine::Sprite());
-	_sprites.back()->init(0.0f, 0.0f, _screenWidth/2, _screenWidth / 2, "Textures/jimmyJump_pack/PNG/CharacterRight_Standing.png");
-	
-	_sprites.push_back(new GameEngine::Sprite());
-	_sprites.back()->init(_screenWidth / 2, 0.0f, _screenWidth / 2, _screenWidth/2, "Textures/jimmyJump_pack/PNG/CharacterRight_Standing.png");
-	
 	
 	//_playerTexture = ImageLoader::LoadPNG("Textures/jimmyJump_pack/PNG/CharacterRight_Standing.png");
 	gameLoop();
@@ -51,6 +44,8 @@ void MainGame::initSystems()
 	_window.create("Game Engine", _screenWidth, _screenHeight, GameEngine::FULLSCREEN);
 
 	initShaders();
+
+	_spriteBatch.init();
 }
 
 void MainGame::initShaders()
@@ -194,10 +189,26 @@ void MainGame::drawGame()
 
 	glUniformMatrix4fv(pLocation, 1, GL_FALSE, &(cameraMatrix[0][0]));
 
-	for (int i = 0; i < _sprites.size(); i++)
-	{
-		_sprites[i]->draw();
-	}
+	//call out sprite batch 
+	_spriteBatch.begin();
+	//x and y at 0, width and height at 50
+	glm::vec4 pos(0,0,50,50);
+	glm::vec4 uv(0.0f,0.0f,1.0f,1.0f);
+	static GameEngine::GLTexture texture = GameEngine::ResourceManager::getTexture("Textures/jimmyJump_pack/PNG/CharacterRight_Standing.png");
+	GameEngine::Color color;
+	color.r = 255;
+	color.g = 255;
+	color.b = 255;
+	color.a = 255;
+
+	//draw sprite
+	_spriteBatch.draw(pos,uv,texture.id, 0.0f,color);
+
+	_spriteBatch.draw(pos +glm::vec4(50,0,0,0), uv, texture.id, 0.0f, color);
+
+	_spriteBatch.end();
+
+	_spriteBatch.renderBatch();
 	
 	//unbind texture
 	glBindTexture(GL_TEXTURE_2D,0);
