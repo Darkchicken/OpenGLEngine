@@ -31,12 +31,10 @@ namespace GameEngine
 			//insert into texture map
 			_textureMap.insert(make_pair(texturePath, newTexture));
 
-			std::cout << "Loaded Texture\n";
 			return newTexture;
 		}
 		//if in map, mit is pointing to texture
 		//use arrow to access elements, because mit is a pointer
-		std::cout << "Used Cached Texture\n";
 
 		return mit->second;
 	}

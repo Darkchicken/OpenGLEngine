@@ -59,6 +59,10 @@ namespace GameEngine
 		//enable VSYNC (1 is on, 0 is off)
 		SDL_GL_SetSwapInterval(1);
 
+		//enable alpha blend
+		glEnable(GL_BLEND);
+		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
 		return 0;
 	}
 

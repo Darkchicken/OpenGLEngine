@@ -48,5 +48,19 @@ namespace GameEngine
 
 		//if players asks, return camera matrix to draw
 	}
+
+	glm::vec2 Camera2D::convertScreenToWorldCoords(glm::vec2 screenCoords)
+	{
+		//invert Y direction
+		screenCoords.y = _screenHeight - screenCoords.y;
+		//make it so 0 is center
+		screenCoords -= glm::vec2(_screenWidth / 2, _screenHeight / 2);
+		//give world coords proper scale
+		screenCoords /= _scale;
+		//translate with the camera position
+		screenCoords += _position;
+
+		return screenCoords;
+	}
 }
 

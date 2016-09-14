@@ -8,8 +8,11 @@
 #include <GameEngine/GLTexture.h>
 #include <GameEngine/Window.h>
 #include <GameEngine/Camera2D.h>
+#include <GameEngine/InputManager.h>
+#include <GameEngine/Timing.h>
 
 #include <GameEngine/SpriteBatch.h>
+#include "Bullet.h"
 
 #include <vector>
 
@@ -31,8 +34,6 @@ private:
 	void processInput();
 	void drawGame();
 
-	void calculateFPS();
-	
 	GameEngine::Window _window;
 	int _screenWidth;
 	int _screenHeight;
@@ -45,12 +46,15 @@ private:
 
 	GameEngine::SpriteBatch _spriteBatch;
 
-	float _fps;
-	float _frameTime;
-	
+	GameEngine::InputManager _inputManager;
+	GameEngine::FPSLimiter _fpsLimiter;
+	//keeps track of all bullets in game
+	std::vector<Bullet> _bullets;
 
-	float _time;
+	float _fps;
 	float _maxFPS;
+	float _time;
+	
 
 };
 
