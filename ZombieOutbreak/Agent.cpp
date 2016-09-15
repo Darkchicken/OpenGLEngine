@@ -91,13 +91,30 @@ void Agent::collideWithTile(glm::vec2 tilePosition)
 	{
 		if (std::max(xDepth,0.0f) < std::max(yDepth, 0.0f))
 		{
-			//push out in x direction
-			_position.x += xDepth;
+			if (distVec.x < 0)
+			{
+				//push out in -x direction
+				_position.x -= xDepth;
+			}
+			else
+			{
+				//push out in x direction
+				_position.x += xDepth;
+			}
+			
 		}
 		else
 		{
-			//push out in y direction
-			_position.y += yDepth;
+			if (distVec.y < 0)
+			{
+				//push out in -y direction
+				_position.y -= yDepth;
+			}
+			else
+			{
+				//push out in y direction
+				_position.y += yDepth;
+			}
 		}
 	}
 
