@@ -162,6 +162,7 @@ void MainGame::gameLoop()
 	//main game loop to run game
 	while (_gameState == GameState::PLAY)
 	{
+		
 		//start fps limiter
 		fpsLimiter.begin();
 
@@ -314,6 +315,7 @@ void MainGame::updateBullets()
 					_zombies.pop_back();
 					//count another killed zombie
 					_numZombiesKilled++;
+					
 				}
 				else
 				{
@@ -363,6 +365,7 @@ void MainGame::updateBullets()
 						_humans.pop_back();
 						//count another killed human
 						_numHumansKilled++;
+						
 					}
 					else
 					{
@@ -380,12 +383,12 @@ void MainGame::updateBullets()
 					wasBulletRemoved = true;
 					//decrement i to be sure we dont skip bullets
 					i--;
-					//if a bullet is removed, stop looping through zombies 
+					//if a bullet is removed, stop looping through humans 
 					break;
 				}
 				else
 				{
-					//if no zombies were collided with, increment j
+					//if no humans were collided with, increment j
 					j++;
 				}
 			}
@@ -404,8 +407,8 @@ void MainGame::checkVictory()
 	//if all zombies are dead, we win
 	if (_zombies.empty())
 	{
-		std::printf("*** You Win!!! ***\n You killed %d civilians and %d zombies. \n There are %d/%d civilians remaining.\n"+
-			_numHumansKilled, _numZombiesKilled,_humans.size()-1, _levels[_currentLevel] -> getNumHumans());
+		std::printf("*** You win!!! *** \n You killed %d civilians and %d zombies. \n There are %d/%d civilians remaining.\n",
+			_numHumansKilled, _numZombiesKilled ,_humans.size()-1, _levels[_currentLevel] -> getNumHumans());
 		GameEngine::fatalError("");
 	}
 }
