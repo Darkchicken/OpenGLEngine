@@ -46,6 +46,9 @@ private:
 	//update all bullets
 	void updateBullets();
 
+	//checks if the player has won
+	void checkVictory();
+
 	//handles player input
 	void processInput();
 
@@ -73,6 +76,10 @@ private:
 	int _screenWidth, _screenHeight;
 	float _fps;
 	int _currentLevel;
+
+	int _numHumansKilled; ///<humans killed by player
+	int _numZombiesKilled; ///< zombies killed by player
+
 
 	GameState _gameState;
 	
