@@ -23,7 +23,9 @@ void Player::init(float speed, glm::vec2 position, GameEngine::InputManager* inp
 	_color.a = 255;
 
 }
-void Player::update()
+void Player::update(std::vector<std::string>& levelData,
+	std::vector<Human> humans,
+	std::vector<Zombie> zombies)
 {
 	if (_inputManager->isKeyPressed(SDLK_w))
 	{

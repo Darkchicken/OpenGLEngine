@@ -9,6 +9,8 @@ public:
 	Zombie();
 	~Zombie();
 
-	virtual void update();
+	virtual void update(std::vector<std::string>& levelData,
+		std::vector<Human> humans,
+		std::vector<Zombie> zombies);
 };
 
