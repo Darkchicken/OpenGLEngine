@@ -29,6 +29,9 @@ public:
 	//same texture for every agent (may want to change this)
 	void draw(GameEngine::SpriteBatch& _spriteBatch);
 
+	//returns true if we died
+	bool applyDamage(float damage);
+
 	const glm::vec2 getPosition() const { return _position; };
 
 	
@@ -42,6 +45,9 @@ protected:
 	glm::vec2 _position;
 	//movement speed of agent
 	float _speed;
+	//health of agent
+	float _health;
+
 	//color of agent
 	GameEngine::Color _color;
 

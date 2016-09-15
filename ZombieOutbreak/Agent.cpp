@@ -96,6 +96,21 @@ void Agent::draw(GameEngine::SpriteBatch& _spriteBatch)
 	_spriteBatch.draw(destRect,uvRect, textureID, 0, _color);
 }
 
+//returns true if we died
+bool Agent::applyDamage(float damage)
+{
+	//deal damage
+	_health -= damage;
+	//if health is depleted
+	if (_health <= 0)
+	{
+		//return that death is true
+		return true;
+	}
+	//if health is remaining, return death is false
+	return false;
+}
+
 void Agent::checkTilePosition(const std::vector<std::string>& levelData,std::vector<glm::vec2>& collideTilePositions, float cornerX, float cornerY)
 {
 	//first corner (convert position to int)

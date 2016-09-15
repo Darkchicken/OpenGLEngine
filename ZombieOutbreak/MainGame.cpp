@@ -124,9 +124,9 @@ void MainGame::initLevel()
 
 	//set up player's guns
 	const float BULLET_SPEED = 20.0f;
-	_player->addGun(new Gun("Magnum",30.0f, 1, 10.0f, 30.0f, BULLET_SPEED));
-	_player->addGun(new Gun("Shotgun", 60.0f, 20, 40.0f, 4.0f, BULLET_SPEED));
-	_player->addGun(new Gun("MP5", 5.0f, 1, 20.0f, 20.0f, BULLET_SPEED));
+	_player->addGun(new Gun("Magnum",10.0f, 1, 5.0f, 30.0f, BULLET_SPEED));
+	_player->addGun(new Gun("Shotgun", 30.0f, 12, 20.0f, 4.0f, BULLET_SPEED));
+	_player->addGun(new Gun("MP5", 2.0f, 1, 10.0f, 20.0f, BULLET_SPEED));
 	
 }
 
@@ -254,13 +254,75 @@ void MainGame::updateAgents()
 //update all bullets
 void MainGame::updateBullets()
 {
+	//update and collide with world
 	//for all bullets in game
+	for (int i = 0; i < _bullets.size();)
+	{
+		//if update returns true, bullet collided with wall
+		//update each bullet
+		if (_bullets[i].update(_levels[_currentLevel]->getLevelData()))
+		{
+			//moves current bullet to the last element
+			_bullets[i] = _bullets.back();
+			//pops off the last element
+			_bullets.pop_back();
+		}
+		else
+		{
+			//only increment when a bullet wasnt removed
+			i++;
+		}
+	}
+
+	//Collide with humans and zombies
 	for (int i = 0; i < _bullets.size(); i++)
 	{
-		//update each bullet
-		_bullets[i].update(_humans, _zombies);
+		//loop through zombies
+		for (int j = 0; j < _zombies.size();)
+		{
+			//if bullet collides with a zombie
+			if (_bullets[i].collideWithAgent(_zombies[j]))
+			{
+
+				//damage zombie, kill it if out of health
+				//if this is true, zombie died
+				if (_zombies[j]->applyDamage(_bullets[i].getDamage()))
+				{
+					//if zombie died...
+					//delete zombie data
+					delete _zombies[j];
+					//move empty element to last index
+					_zombies[j] = _zombies.back();
+					//pop off last index
+					_zombies.pop_back();
+				}
+				else
+				{
+					//increment j if a zombie was not removed
+					j++;
+				}
+
+
+				//remove bullet
+				//moves current bullet to the last element
+				_bullets[i] = _bullets.back();
+				//pops off the last element
+				_bullets.pop_back();
+				//decrement i to be sure we dont skip bullets
+				i--;
+				//if a bullet is removed, stop looping through zombies 
+				break;
+			}
+			else
+			{
+				//if no zombies were collided with, increment j
+				j++;
+			}
+		}
 	}
-}
+	}
+
+	
 
 
 void MainGame::processInput()

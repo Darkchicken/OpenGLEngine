@@ -41,12 +41,13 @@ void Gun::fire(const glm::vec2& position, const glm::vec2& direction, std::vecto
 	static std::mt19937 randomEngine(time(nullptr));
 	//create a distribution between -spread and +spread
 	static std::uniform_real_distribution<float> randRotate(-_spread, _spread);
+	const float DEG_TO_RAD = 3.14159265359f / 180.0f;
 
 
 	//loop through number of bullets to fire per shot
 	for (int i = 0; i < _bulletsPerShot; i++)
 	{
 		//create a new bullet and add to bullets vector
-		bullets.emplace_back(position,glm::rotate( direction,randRotate(randomEngine)), _bulletDamage, _bulletSpeed);
+		bullets.emplace_back(position,glm::rotate(direction,randRotate(randomEngine)*DEG_TO_RAD), _bulletDamage, _bulletSpeed);
 	}
 }

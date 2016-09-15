@@ -23,6 +23,10 @@ void Player::init(float speed, glm::vec2 position, GameEngine::InputManager* inp
 	_inputManager = inputManager;
 	_camera = camera;
 	_bullets = bullets;
+
+	//set player health
+	_health = 150.0f;
+
 	//set player color to dark blue
 	_color.r = 0;
 	_color.g = 0;

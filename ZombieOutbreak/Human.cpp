@@ -21,6 +21,9 @@ void Human::init(float speed, glm::vec2 position)
 	//create a distribution that random numbers can fall between
 	static std::uniform_real_distribution<float> randDir(-1.0f, 1.0f);
 
+	//set human health
+	_health = 20.0f;
+
 	//set variables
 	_color.r = 200;
 	_color.g = 0;
