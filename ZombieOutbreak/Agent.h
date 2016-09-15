@@ -16,9 +16,9 @@ public:
 	//destructor must be virtual to call destructors of children as well as own
 	virtual ~Agent();
 	//update for any agent
-	virtual void update(std::vector<std::string>& levelData,
-						std::vector<Human> humans,
-						std::vector<Zombie> zombies) = 0; ///< pure virtual function, cannot create an agent, can only have derived classes, funciton must exist
+	virtual void update(const std::vector<std::string>& levelData,
+						std::vector<Human*>& humans,
+						std::vector<Zombie*>& zombies) = 0; ///< pure virtual function, cannot create an agent, can only have derived classes, funciton must exist
 
 	void collideWithLevel(const std::vector<std::string>& levelData);
 
@@ -34,7 +34,7 @@ public:
 protected:
 	void checkTilePosition(const std::vector<std::string>& levelData,std::vector<glm::vec2>& collideTilePositions,float cornerX, float cornerY );
 
-	void collideWithTile();
+	void collideWithTile(glm::vec2 tilePosition);
 	//position of agent
 	glm::vec2 _position;
 	//movement speed of agent

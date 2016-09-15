@@ -10,8 +10,8 @@ public:
 	//destructor must be virtual to call destructors of children as well as own
 	virtual ~Human();
 
-	virtual void update(std::vector<std::string>& levelData,
-		std::vector<Human> humans,
-		std::vector<Zombie> zombies);
+	virtual void update(const std::vector<std::string>& levelData,
+		std::vector<Human*>& humans,
+		std::vector<Zombie*>& zombies);
 };
 

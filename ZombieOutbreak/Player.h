@@ -13,9 +13,9 @@ public:
 	//initializes player	
 	void init(float speed, glm::vec2 position, GameEngine::InputManager* inputManager);
 	//updates player, handles movement
-	void update(std::vector<std::string>& levelData,
-		std::vector<Human> humans,
-		std::vector<Zombie> zombies);
+	void update(const std::vector<std::string>& levelData,
+		std::vector<Human*>& humans,
+		std::vector<Zombie*>& zombies);
 
 private:
 	GameEngine::InputManager* _inputManager;

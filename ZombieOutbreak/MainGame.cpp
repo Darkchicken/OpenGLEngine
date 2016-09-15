@@ -4,6 +4,8 @@
 #include <GameEngine/Timing.h>
 #include <iostream>
 
+#include "Zombie.h"
+
 
 MainGame::MainGame() : 
 _screenWidth(1024),
@@ -128,7 +130,8 @@ void MainGame::updateAgents()
 	//update all humans
 	for (int i = 0; i < _humans.size(); i++)
 	{
-		_humans[i]->update();
+		
+		_humans[i]-> update(_levels[_currentLevel]->getLevelData(),_humans,_zombies);
 	}
 
 	//update all zombies

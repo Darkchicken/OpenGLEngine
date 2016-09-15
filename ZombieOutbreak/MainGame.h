@@ -11,6 +11,8 @@
 #include "Player.h"
 #include "Level.h"
 
+class Zombie;
+
 enum class GameState {PLAY, EXIT};
 
 
@@ -57,6 +59,8 @@ private:
 	std::vector<Level*> _levels;
 	//vector of all Humans in game (pointers to human object)
 	std::vector < Human*> _humans;
+	//vector of all Zombies in game (pointers to zombie object)
+	std::vector < Zombie*> _zombies;
 
 	Player* _player;
 

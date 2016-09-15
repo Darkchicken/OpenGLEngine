@@ -88,10 +88,14 @@ Level::Level(const std::string& fileName)
 					);
 				break;
 			case '@': ///< this is the player location
+				//set to dot to avoid collisions with @
+				_levelData[y][x] = '.';
 				_startPlayerPos.x = x*TILE_WIDTH;
 				_startPlayerPos.y = y*TILE_WIDTH;
 				break;
 			case 'Z': ///< this is the zombie location
+			    //set to dot to avoid collisions with Z
+				_levelData[y][x] = '.';
 				_zombieStartPositions.emplace_back(x*TILE_WIDTH, y*TILE_WIDTH);
 				break;
 			case '.': ///< this is an empty tile
