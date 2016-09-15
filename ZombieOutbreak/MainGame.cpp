@@ -7,6 +7,12 @@
 #include <ctime>
 #include "Zombie.h"
 
+//const float for player default speed
+const float PLAYER_SPEED = 5.0f;
+//const float for human default speed
+const float HUMAN_SPEED = 1.0f;
+//const float for zombie default speed
+const float ZOMBIE_SPEED = 1.3f;
 
 MainGame::MainGame() : 
 _screenWidth(1024),
@@ -75,7 +81,7 @@ void MainGame::initLevel()
 	//set up player
 	_player = new Player();
 	//set variables (speed, position, inputmanager)
-	_player->init(4.0f, _levels[_currentLevel] ->getStartPlayerPos(), &_inputManager);
+	_player->init(PLAYER_SPEED, _levels[_currentLevel] ->getStartPlayerPos(), &_inputManager);
 	//add player to humans vector
 	_humans.push_back(_player);
 
@@ -88,8 +94,7 @@ void MainGame::initLevel()
 	static std::uniform_int_distribution<int> randX(2, _levels[_currentLevel]->getWidth()-2);
 	static std::uniform_int_distribution<int> randY(2, _levels[_currentLevel]->getHeight()-2);
 
-	//const float for human default speed
-	const float HUMAN_SPEED = 1.0f;
+	
 	
 	//add all the random humans
 	for (int i = 0; i < _levels[_currentLevel]->getNumHumans(); i++)
@@ -100,6 +105,18 @@ void MainGame::initLevel()
 		glm::vec2 pos(randX(randomEngine) *TILE_WIDTH, randY(randomEngine)*TILE_WIDTH);
 		//go to the newly created human and set its speed and position
 		_humans.back()->init(HUMAN_SPEED, pos);
+
+	}
+
+	//add all the zombies
+	const std::vector<glm::vec2>& zombiePositions = _levels[_currentLevel]->getStartZombiePos();
+	for (int i = 0; i < zombiePositions.size(); i++)
+	{
+		//push a new zombie object onto the _zombie vector
+		_zombies.push_back(new Zombie);
+		
+		//go to the newly created human and set its speed and position
+		_zombies.back()->init(ZOMBIE_SPEED, zombiePositions[i]);
 
 	}
 	
@@ -161,6 +178,61 @@ void MainGame::updateAgents()
 	}
 
 	//update all zombies
+	for (int i = 0; i < _zombies.size(); i++)
+	{
+
+		_zombies[i]->update(_levels[_currentLevel]->getLevelData(), _humans, _zombies);
+	}
+
+	//update zombie collisions
+	for (int i = 0; i < _zombies.size(); i++)
+	{
+		//collide with other zombies
+		for (int j = i + 1; j < _zombies.size(); j++)
+		{
+
+			_zombies[i]->collideWithAgent(_zombies[j]);
+		}
+		//collide with humans
+		for (int j = i + 1; j < _humans.size(); j++)
+		{
+			//if a zombie collides with a human
+			if (_zombies[i]->collideWithAgent(_humans[j]))
+			{
+				//turn human into a zombie
+
+				//push back a new zombie in _zombies vector
+				_zombies.push_back(new Zombie);
+				//initialize the new zombie and add it
+				_zombies.back()->init(ZOMBIE_SPEED, _humans[j]->getPosition());
+
+				//delete the human
+				delete _humans[j];
+				//back up the humans vector by one
+				_humans[j] = _humans.back();
+				_humans.pop_back();
+			}
+			
+		}
+		
+	}
+
+	//update human collisions
+	for (int i = 0; i < _humans.size(); i++)
+	{
+		//collide with other humans
+		for (int j = i+1; j < _humans.size(); j++)
+		{
+
+			_humans[i]->collideWithAgent(_humans[j]);
+		}
+		//_humans[i]->update(_levels[_currentLevel]->getLevelData(), _humans, _zombies);
+	}
+
+	
+
+	
+
 }
 
 void MainGame::processInput()
@@ -234,6 +306,12 @@ void MainGame::drawGame()
 	for (int i = 0; i < _humans.size(); i++)
 	{
 		_humans[i]->draw(_agentSpriteBatch);
+	}
+
+	//draw all zombies 
+	for (int i = 0; i < _zombies.size(); i++)
+	{
+		_zombies[i]->draw(_agentSpriteBatch);
 	}
 
 	//end drawing agents

@@ -64,6 +64,9 @@ void Human::update(const std::vector<std::string>& levelData,
 	
 
 	//handle collisions during update
-	collideWithLevel(levelData);
+	if (collideWithLevel(levelData))
+	{
+		_direction = glm::rotate(_direction, randRotate(randomEngine) * DEG_TO_RAD); //convert movement to degrees
+	}
 
 }

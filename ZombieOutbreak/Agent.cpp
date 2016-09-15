@@ -14,7 +14,7 @@ Agent::~Agent()
 }
 
 
-void Agent::collideWithLevel(const std::vector<std::string>& levelData)
+bool Agent::collideWithLevel(const std::vector<std::string>& levelData)
 {
 	//vector of all positions of tiles that you can collide with
 	std::vector<glm::vec2> collideTilePositions;
@@ -29,16 +29,56 @@ void Agent::collideWithLevel(const std::vector<std::string>& levelData)
 	//4th corner
 	checkTilePosition(levelData, collideTilePositions, _position.x+AGENT_WIDTH, _position.y + AGENT_WIDTH);
 
+	//if no collisions are taking place, return false
+	if (collideTilePositions.size() == 0)
+	{
+		return false;
+	}
+
 	//do the collision
 	for (int i = 0; i < collideTilePositions.size(); i++)
 	{
 		collideWithTile(collideTilePositions[i]);
 	}
 
-	
+	//return true that a collision took place
+	return true;
 
-
 	
+}
+//use circular collision
+bool Agent::collideWithAgent(Agent* agent)
+{
+	//minimum distance between agent and tile without a collision
+	const float MIN_DISTANCE = AGENT_RADIUS * 2;
+
+	//center point of this agent
+	glm::vec2 centerPosA = _position + glm::vec2(AGENT_RADIUS);
+	//center point of colliding agent
+	glm::vec2 centerPosB = agent->getPosition() + glm::vec2(AGENT_RADIUS);
+	//distance between two agents
+	glm::vec2 distVec = centerPosA - centerPosB;
+	//get length of distance vec
+	float distance = glm::length(distVec);
+	//get depth of collision
+	float collisionDepth = MIN_DISTANCE - distance;
+
+	//check collision
+	if (collisionDepth > 0)
+	{
+		//push each agent by the amount of the collision depth in the direction of the dist vec
+		glm::vec2 collisionDepthVec = glm::normalize(distVec) * collisionDepth;
+
+		//push this agent out by half the collision depth
+		_position += collisionDepthVec / 2.0f;
+		//push colliding agent out by half the collision depth in opposite direction
+		agent->_position -= collisionDepthVec / 2.0f;
+		//return that collision is true
+		return true;
+	}
+	//return that collision is false
+	return false;
+
 }
 
 void Agent::draw(GameEngine::SpriteBatch& _spriteBatch)
@@ -80,7 +120,7 @@ void Agent::checkTilePosition(const std::vector<std::string>& levelData,std::vec
 //Access alighned bounding box (AABB) collision
 void Agent::collideWithTile(glm::vec2 tilePosition)
 {
-	const float AGENT_RADIUS = (float)AGENT_WIDTH / 2.0f;
+	
 	const float TILE_RADIUS = (float)TILE_WIDTH / 2.0f;
 	//minimum distance between agent and tile without a collision
 	const float MIN_DISTANCE = AGENT_RADIUS + TILE_RADIUS;

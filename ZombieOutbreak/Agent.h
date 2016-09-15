@@ -3,7 +3,8 @@
 #include <glm/glm.hpp>
 #include <GameEngine/SpriteBatch.h>
 
-const float AGENT_WIDTH = 60;//slightly smaller than tile
+const float AGENT_WIDTH = 60.0f;//slightly smaller than tile
+const float AGENT_RADIUS = AGENT_WIDTH / 2.0f;
 
 //forward declaration for zombie and human
 class Zombie;
@@ -20,7 +21,9 @@ public:
 						std::vector<Human*>& humans,
 						std::vector<Zombie*>& zombies) = 0; ///< pure virtual function, cannot create an agent, can only have derived classes, funciton must exist
 
-	void collideWithLevel(const std::vector<std::string>& levelData);
+	bool collideWithLevel(const std::vector<std::string>& levelData);
+	//collision with single agent
+	bool collideWithAgent(Agent* agent);
 
 
 	//same texture for every agent (may want to change this)

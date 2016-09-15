@@ -8,6 +8,8 @@ class Zombie : public Agent
 public:
 	Zombie();
 	~Zombie();
+	//initialize zombie object
+	void init(float speed, glm::vec2 position);
 
 	virtual void update(const std::vector<std::string>& levelData,
 		std::vector<Human*>& humans,
