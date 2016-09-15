@@ -25,6 +25,8 @@ Level::Level(const std::string& fileName)
 	//put first string into temp (just humans label)
 	//put second string (int for number of humans) into _numHumans
 	file >> temp >> _numHumans;
+	//use this line to throw out the first line from the data
+	std::getline(file,temp);
 	//read each line of level file, store into temp
 	while (std::getline(file, temp))
 	{

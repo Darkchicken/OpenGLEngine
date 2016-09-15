@@ -62,6 +62,14 @@ void Agent::checkTilePosition(const std::vector<std::string>& levelData,std::vec
 	glm::vec2 cornerPos = glm::vec2(floor(cornerX / (float)TILE_WIDTH),
 		floor(cornerY / (float)TILE_WIDTH));
 
+
+	//prevent agents from being placed outside of world
+	if (cornerPos.x <0 || cornerPos.x > levelData[0].length() - 1 ||
+		cornerPos.y <0 || cornerPos.y > levelData.size() - 1)
+	{
+		return;
+	}
+
 	//check if tile is collidable (if its not an empty space)
 	if (levelData[cornerPos.y][cornerPos.x] != '.')
 	{

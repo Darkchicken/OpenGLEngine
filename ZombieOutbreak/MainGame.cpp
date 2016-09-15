@@ -3,7 +3,8 @@
 #include <GameEngine/GameEngine.h>
 #include <GameEngine/Timing.h>
 #include <iostream>
-
+#include <random>
+#include <ctime>
 #include "Zombie.h"
 
 
@@ -77,6 +78,31 @@ void MainGame::initLevel()
 	_player->init(4.0f, _levels[_currentLevel] ->getStartPlayerPos(), &_inputManager);
 	//add player to humans vector
 	_humans.push_back(_player);
+
+
+	//create a static random engine
+	static std::mt19937 randomEngine;
+	//seed the random engine with time
+	randomEngine.seed(time(nullptr));
+	//create a distribution that random numbers can fall between
+	static std::uniform_int_distribution<int> randX(2, _levels[_currentLevel]->getWidth()-2);
+	static std::uniform_int_distribution<int> randY(2, _levels[_currentLevel]->getHeight()-2);
+
+	//const float for human default speed
+	const float HUMAN_SPEED = 1.0f;
+	
+	//add all the random humans
+	for (int i = 0; i < _levels[_currentLevel]->getNumHumans(); i++)
+	{
+		//push a new human object onto the _humans vector
+		_humans.push_back(new Human);
+		//create a new random position vector
+		glm::vec2 pos(randX(randomEngine) *TILE_WIDTH, randY(randomEngine)*TILE_WIDTH);
+		//go to the newly created human and set its speed and position
+		_humans.back()->init(HUMAN_SPEED, pos);
+
+	}
+	
 }
 
 void MainGame::initShaders()
