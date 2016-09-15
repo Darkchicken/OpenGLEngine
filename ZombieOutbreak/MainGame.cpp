@@ -38,6 +38,16 @@ MainGame::~MainGame()
 	{
 		delete _levels[i];
 	}
+
+	//delete all humans and zombies
+	for (int i = 0; i < _humans.size(); i++)
+	{
+		delete _humans[i];
+	}
+	for (int i = 0; i < _zombies.size(); i++)
+	{
+		delete _zombies[i];
+	}
 }
 
 void MainGame::run()
@@ -414,6 +424,7 @@ void MainGame::processInput()
 		{
 		case SDL_QUIT:
 			//exit game
+			_gameState = GameState::EXIT;
 			break;
 		case SDL_MOUSEMOTION:
 			_inputManager.setMouseCoords(evnt.motion.x, evnt.motion.y);
