@@ -47,14 +47,14 @@ void Human::update(const std::vector<std::string>& levelData,
 	//create a static random engine and seed with time
 	static std::mt19937 randomEngine(time(nullptr));
 	//create a distribution that random numbers can fall between
-	static std::uniform_real_distribution<float> randRotate(-20.0f, 20.0f);
-
+	static std::uniform_real_distribution<float> randRotate(-40.0f, 40.0f);
+	const float DEG_TO_RAD = 3.14159265359f / 180.0f;
 	//move human
 	_position += _direction * _speed;
 	//randomly change direction every 20 frames
 	if (_frames == 20)
 	{
-		_direction = glm::rotate(_direction, randRotate(randomEngine));
+		_direction = glm::rotate(_direction, randRotate(randomEngine) * DEG_TO_RAD); //convert movement to degrees
 		_frames = 0;
 	}
 	else
