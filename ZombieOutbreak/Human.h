@@ -9,9 +9,14 @@ public:
 	Human();
 	//destructor must be virtual to call destructors of children as well as own
 	virtual ~Human();
+	//initialize human object
+	void init(float speed, glm::vec2 position);
 
 	virtual void update(const std::vector<std::string>& levelData,
 		std::vector<Human*>& humans,
 		std::vector<Zombie*>& zombies);
+
+private:
+	glm::vec2 _direction;
 };
 
