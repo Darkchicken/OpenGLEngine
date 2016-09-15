@@ -10,6 +10,7 @@
 
 #include "Player.h"
 #include "Level.h"
+#include "Bullet.h"
 
 class Zombie;
 
@@ -42,6 +43,9 @@ private:
 	//update all agents
 	void updateAgents();
 
+	//update all bullets
+	void updateBullets();
+
 	//handles player input
 	void processInput();
 
@@ -61,6 +65,8 @@ private:
 	std::vector < Human*> _humans;
 	//vector of all Zombies in game (pointers to zombie object)
 	std::vector < Zombie*> _zombies;
+	//vector of all bullets in game 
+	std::vector < Bullet> _bullets;
 
 	Player* _player;
 

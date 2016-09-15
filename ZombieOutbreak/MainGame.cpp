@@ -2,10 +2,12 @@
 #include <SDL/SDL.h>
 #include <GameEngine/GameEngine.h>
 #include <GameEngine/Timing.h>
+#include <GameEngine/Errors.h>
 #include <iostream>
 #include <random>
 #include <ctime>
 #include "Zombie.h"
+#include "Gun.h"
 
 //const float for player default speed
 const float PLAYER_SPEED = 5.0f;
@@ -81,7 +83,7 @@ void MainGame::initLevel()
 	//set up player
 	_player = new Player();
 	//set variables (speed, position, inputmanager)
-	_player->init(PLAYER_SPEED, _levels[_currentLevel] ->getStartPlayerPos(), &_inputManager);
+	_player->init(PLAYER_SPEED, _levels[_currentLevel] ->getStartPlayerPos(), &_inputManager,&_camera, &_bullets);
 	//add player to humans vector
 	_humans.push_back(_player);
 
@@ -119,6 +121,12 @@ void MainGame::initLevel()
 		_zombies.back()->init(ZOMBIE_SPEED, zombiePositions[i]);
 
 	}
+
+	//set up player's guns
+	const float BULLET_SPEED = 20.0f;
+	_player->addGun(new Gun("Magnum",30.0f, 1, 10.0f, 30.0f, BULLET_SPEED));
+	_player->addGun(new Gun("Shotgun", 60.0f, 20, 40.0f, 4.0f, BULLET_SPEED));
+	_player->addGun(new Gun("MP5", 5.0f, 1, 20.0f, 20.0f, BULLET_SPEED));
 	
 }
 
@@ -151,6 +159,9 @@ void MainGame::gameLoop()
 
 		//update all agents
 		updateAgents();
+
+		//update bullets
+		updateBullets();
 
 		//camera follows player
 		_camera.setPosition(_player->getPosition());
@@ -193,8 +204,8 @@ void MainGame::updateAgents()
 
 			_zombies[i]->collideWithAgent(_zombies[j]);
 		}
-		//collide with humans
-		for (int j = i + 1; j < _humans.size(); j++)
+		//collide with humans (start at 1 to skip player human)
+		for (int j = 1; j < _humans.size(); j++)
 		{
 			//if a zombie collides with a human
 			if (_zombies[i]->collideWithAgent(_humans[j]))
@@ -211,8 +222,13 @@ void MainGame::updateAgents()
 				//back up the humans vector by one
 				_humans[j] = _humans.back();
 				_humans.pop_back();
-			}
-			
+			}			
+		}
+
+		//collide with player
+		if (_zombies[i]->collideWithAgent(_player))
+		{
+			GameEngine::fatalError("YOU LOSE!");
 		}
 		
 	}
@@ -234,6 +250,18 @@ void MainGame::updateAgents()
 	
 
 }
+
+//update all bullets
+void MainGame::updateBullets()
+{
+	//for all bullets in game
+	for (int i = 0; i < _bullets.size(); i++)
+	{
+		//update each bullet
+		_bullets[i].update(_humans, _zombies);
+	}
+}
+
 
 void MainGame::processInput()
 {
@@ -312,6 +340,12 @@ void MainGame::drawGame()
 	for (int i = 0; i < _zombies.size(); i++)
 	{
 		_zombies[i]->draw(_agentSpriteBatch);
+	}
+
+	//draw all bullets
+	for (int i = 0; i < _bullets.size(); i++)
+	{
+		_bullets[i].draw(_agentSpriteBatch);
 	}
 
 	//end drawing agents
