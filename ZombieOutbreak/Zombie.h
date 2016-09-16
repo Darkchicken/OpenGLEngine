@@ -15,6 +15,9 @@ public:
 		std::vector<Human*>& humans,
 		std::vector<Zombie*>& zombies);
 
+	//updated draw for zombie
+	void draw(GameEngine::SpriteBatch& _spriteBatch) override;
+
 private:
 
 	Human* getNearestHuman(std::vector<Human*>& humans);

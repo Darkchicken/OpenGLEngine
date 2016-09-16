@@ -84,7 +84,7 @@ Level::Level(const std::string& fileName)
 				_spriteBatch.draw(
 					destRect,
 					uvRect,
-					GameEngine::ResourceManager::getTexture("Textures/light_bricks.png").id, ///< texture id
+					GameEngine::ResourceManager::getTexture("Textures/blood_bricks.png").id, ///< texture id
 					0.0f, ///< depth
 					whiteColor	///< color
 					);

@@ -27,7 +27,7 @@ public:
 
 
 	//same texture for every agent (may want to change this)
-	void draw(GameEngine::SpriteBatch& _spriteBatch);
+	virtual void draw(GameEngine::SpriteBatch& _spriteBatch);
 
 	//returns true if we died
 	bool applyDamage(float damage);

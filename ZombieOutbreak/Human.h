@@ -16,6 +16,9 @@ public:
 		std::vector<Human*>& humans,
 		std::vector<Zombie*>& zombies);
 
+	//updated draw for human
+	void draw(GameEngine::SpriteBatch& _spriteBatch) override;
+
 private:
 	glm::vec2 _direction;
 	int _frames;

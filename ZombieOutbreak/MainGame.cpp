@@ -71,7 +71,7 @@ void MainGame::initSystems()
 	_window.create("Zombie Outbreak",_screenWidth, _screenHeight, 0);
 
 	//set background color
-	glClearColor(0.7f, 0.7f, 0.7f, 1.0f);
+	glClearColor(0.2f, 0.2f, 0.2f, 1.0f);
 
 	//load shaders and texture shading
 	initShaders();

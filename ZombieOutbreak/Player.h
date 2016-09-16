@@ -27,6 +27,9 @@ public:
 		std::vector<Zombie*>& zombies
 		) override;
 
+	//updated draw for human
+	virtual void draw(GameEngine::SpriteBatch& _spriteBatch) override;
+
 private:
 	GameEngine::InputManager* _inputManager;
 	GameEngine::Camera2D* _camera;

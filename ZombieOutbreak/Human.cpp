@@ -2,6 +2,7 @@
 #include <ctime>
 #include <random>
 #include <glm/gtx/rotate_vector.hpp>
+#include <GameEngine/ResourceManager.h>
 
 Human::Human() :
 	_frames(0)
@@ -25,9 +26,9 @@ void Human::init(float speed, glm::vec2 position)
 	_health = 20.0f;
 
 	//set variables
-	_color.r = 200;
-	_color.g = 0;
-	_color.b = 200;
+	_color.r = 255;
+	_color.g = 255;
+	_color.b = 255;
 	_color.a = 255;
 
 	_speed = speed;
@@ -72,4 +73,18 @@ void Human::update(const std::vector<std::string>& levelData,
 		_direction = glm::rotate(_direction, randRotate(randomEngine) * DEG_TO_RAD); //convert movement to degrees
 	}
 
+}
+
+void Human::draw(GameEngine::SpriteBatch& _spriteBatch)
+{
+	static int textureID = GameEngine::ResourceManager::getTexture("Textures/civilian.png").id;
+	const glm::vec4 uvRect(0.0f, 0.0f, 1.0f, 1.0f);
+
+
+	glm::vec4 destRect;
+	destRect.x = _position.x;
+	destRect.y = _position.y;
+	destRect.z = AGENT_WIDTH;
+	destRect.w = AGENT_WIDTH;
+	_spriteBatch.draw(destRect, uvRect, textureID, 0, _color);
 }

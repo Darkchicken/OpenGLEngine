@@ -4,6 +4,8 @@
 #include "Gun.h"
 #include "Bullet.h"
 
+#include <GameEngine/ResourceManager.h>
+
 Player::Player():
 	_currentGunIndex(-1)
 {
@@ -28,9 +30,9 @@ void Player::init(float speed, glm::vec2 position, GameEngine::InputManager* inp
 	_health = 150.0f;
 
 	//set player color to dark blue
-	_color.r = 0;
-	_color.g = 0;
-	_color.b = 185;
+	_color.r = 255;
+	_color.g = 255;
+	_color.b = 255;
 	_color.a = 255;
 
 }
@@ -106,6 +108,21 @@ void Player::update(const std::vector<std::string>& levelData,
 	//test collisions
 	collideWithLevel(levelData);
 }
+
+void Player::draw(GameEngine::SpriteBatch& _spriteBatch)
+{
+	static int textureID = GameEngine::ResourceManager::getTexture("Textures/player.png").id;
+	const glm::vec4 uvRect(0.0f, 0.0f, 1.0f, 1.0f);
+
+
+	glm::vec4 destRect;
+	destRect.x = _position.x;
+	destRect.y = _position.y;
+	destRect.z = AGENT_WIDTH;
+	destRect.w = AGENT_WIDTH;
+	_spriteBatch.draw(destRect, uvRect, textureID, 0, _color);
+}
+
 
 
 
