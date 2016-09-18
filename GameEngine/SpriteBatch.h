@@ -54,7 +54,7 @@ namespace GameEngine
 		//adds sprites to batch
 		//pass by reference to avoid copying tons of data
 		//use const to make sure referenced info isnt going to change
-		void draw(const glm::vec4& destRect,const glm::vec4& uvRect, GLuint texture, float depth, const Color& color);
+		void draw(const glm::vec4& destRect,const glm::vec4& uvRect, GLuint texture, float depth, const ColorRGBA8& color);
 		//finishes rendering, draws sprites to screen
 		void renderBatch();
 

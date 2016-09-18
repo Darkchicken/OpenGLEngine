@@ -15,8 +15,8 @@ namespace GameEngine
 		void draw();
 
 	private:
-		int _x;
-		int _y;
+		float _x;
+		float _y;
 		int _width;
 		int _height;
 		//GL unsigned in guaranteed to be 32 bits

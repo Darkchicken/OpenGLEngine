@@ -19,7 +19,8 @@ public:
 	//update for any agent
 	virtual void update(const std::vector<std::string>& levelData,
 						std::vector<Human*>& humans,
-						std::vector<Zombie*>& zombies) = 0; ///< pure virtual function, cannot create an agent, can only have derived classes, funciton must exist
+						std::vector<Zombie*>& zombies,
+						float deltaTime) = 0; ///< pure virtual function, cannot create an agent, can only have derived classes, funciton must exist
 
 	bool collideWithLevel(const std::vector<std::string>& levelData);
 	//collision with single agent
@@ -49,7 +50,7 @@ protected:
 	float _health;
 
 	//color of agent
-	GameEngine::Color _color;
+	GameEngine::ColorRGBA8 _color;
 
 	
 

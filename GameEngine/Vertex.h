@@ -10,9 +10,14 @@ namespace GameEngine
 		float y;
 	};
 
-
-	struct Color
+	//8 bits per channel, 4 color channels
+	struct ColorRGBA8
 	{
+		//default constructor, set to black
+		ColorRGBA8():r(0), g(0), b(0), a(0){}
+		//constructor with arguments, initialize color
+		ColorRGBA8(GLubyte R, GLubyte G, GLubyte B, GLubyte A) :r(R), g(G), b(B), a(A) {}
+
 		//4 bytes (r,g,b,a)
 		GLubyte r;
 		GLubyte g;
@@ -32,7 +37,7 @@ namespace GameEngine
 		//vertex has a position and color
 		Positon position;
 
-		Color color;
+		ColorRGBA8 color;
 		//uv texture coordinates
 		UV uv;
 

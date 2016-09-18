@@ -12,7 +12,7 @@ public:
 	~Gun();
 
 
-	void update(bool isMouseDown,const glm::vec2& position, const glm::vec2& direction, std::vector<Bullet>& bullets);
+	void update(bool isMouseDown,const glm::vec2& position, const glm::vec2& direction, std::vector<Bullet>& bullets, float deltaTime);
 	
 
 
@@ -24,7 +24,7 @@ private:
 
 	std::string _name; ///< gun name
 
-	int _frameCounter;///<counts frames in update
+	float _frameCounter;///<counts frames in update
 
 	int _fireRate;///< fire rate in terms of frames
 

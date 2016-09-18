@@ -46,15 +46,16 @@ void Human::init(float speed, glm::vec2 position)
 
 void Human::update(const std::vector<std::string>& levelData,
 	std::vector<Human*>& humans,
-	std::vector<Zombie*>& zombies)
+	std::vector<Zombie*>& zombies,
+	float deltaTime)
 {
 	//create a static random engine and seed with time
 	static std::mt19937 randomEngine(time(nullptr));
 	//create a distribution that random numbers can fall between
 	static std::uniform_real_distribution<float> randRotate(-40.0f, 40.0f);
 	const float DEG_TO_RAD = 3.14159265359f / 180.0f;
-	//move human
-	_position += _direction * _speed;
+	//move human, multiply by deltatime for timestep
+	_position += _direction * _speed * deltaTime;
 	//randomly change direction every 20 frames
 	if (_frames == 20)
 	{

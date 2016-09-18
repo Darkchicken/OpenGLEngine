@@ -14,7 +14,8 @@ public:
 
 	virtual void update(const std::vector<std::string>& levelData,
 		std::vector<Human*>& humans,
-		std::vector<Zombie*>& zombies);
+		std::vector<Zombie*>& zombies,
+		float deltaTime) override;
 
 	//updated draw for human
 	void draw(GameEngine::SpriteBatch& _spriteBatch) override;
