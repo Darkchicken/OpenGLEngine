@@ -157,7 +157,11 @@ void MainGame::gameLoop()
 {
 	//limit screen fps
 	GameEngine::FPSLimiter fpsLimiter;
-	fpsLimiter.setMaxFPS(60.0f);
+	fpsLimiter.setMaxFPS(600000.0f);
+
+	//zoom out by 4 times
+	const float CAMERA_SCALE = 1.0f / 4.0f;
+	_camera.setScale(CAMERA_SCALE);
 
 	//main game loop to run game
 	while (_gameState == GameState::PLAY)
@@ -190,6 +194,8 @@ void MainGame::gameLoop()
 
 		//end fps limiter and store fps value
 		_fps = fpsLimiter.end();
+
+		std::cout << _fps << std::endl;
 
 	}
 }

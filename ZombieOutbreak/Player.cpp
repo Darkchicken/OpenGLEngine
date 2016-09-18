@@ -29,7 +29,7 @@ void Player::init(float speed, glm::vec2 position, GameEngine::InputManager* inp
 	//set player health
 	_health = 150.0f;
 
-	//set player color to dark blue
+	//set player color to white
 	_color.r = 255;
 	_color.g = 255;
 	_color.b = 255;
