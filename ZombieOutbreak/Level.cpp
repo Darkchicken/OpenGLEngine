@@ -71,6 +71,15 @@ Level::Level(const std::string& fileName)
 					whiteColor	///< color
 					);
 				break;
+			case 'B': ///< this is a red brick tile
+				_spriteBatch.draw(
+					destRect,
+					uvRect,
+					GameEngine::ResourceManager::getTexture("Textures/red_bricks.png").id, ///< texture id
+					0.0f, ///< depth
+					whiteColor	///< color
+					);
+				break;
 			case 'G': ///< this is a glass tile
 				_spriteBatch.draw(
 					destRect,

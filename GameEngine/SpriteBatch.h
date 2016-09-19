@@ -76,9 +76,10 @@ namespace GameEngine
 		GLuint _vao;
 
 
-		//using pointers so only a few bytes of data will need to be sorted
-		//would normally be more because Glyph struct contains a lot of data
-		std::vector<Glyph*> _glyphs;
+		//vector of glyph pointers for sorting
+		std::vector<Glyph*> _glyphPointers;
+		//vector of actual glyphs
+		std::vector<Glyph> _glyphs;
 
 		std::vector<RenderBatch> _renderBatches;
 
