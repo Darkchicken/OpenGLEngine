@@ -28,11 +28,7 @@ namespace GameEngine
 		_sortType = sortType;
 		//clear vectors to save memory (changes size back to 0)
 		_renderBatches.clear();
-		//delete glyph pointers to prevent memory leak
-		for (int i = 0; i < _glyphs.size(); i++)
-		{
-			delete _glyphs[i];
-		}
+	
 		_glyphs.clear();
 
 	}
@@ -41,6 +37,13 @@ namespace GameEngine
 	
 	void SpriteBatch::end()
 	{
+		//set the size of _glyphPointers to the size of _glyphs
+		_glyphPointers.resize(_glyphs.size());
+		//cause glyph pointers to reference glyphs
+		for (int i = 0; i < _glyphs.size(); i++)
+		{
+			_glyphPointers[i] = &_glyphs[i];
+		}
 		//sort glyphs
 		sortGlyphs();
 		//generate batches from glyphs
@@ -51,32 +54,8 @@ namespace GameEngine
 	void SpriteBatch::draw(const glm::vec4& destRect, const glm::vec4& uvRect, GLuint texture,float depth, const ColorRGBA8& color)
 	{
 
-		//create new glyph pointer
-		//must rememeber to delete later or you have memory leak
-		Glyph* newGlyph = new Glyph;
-		newGlyph->texture = texture;
-		newGlyph->depth = depth;
-
-		newGlyph->topLeft.color = color;
-		newGlyph->topLeft.setPosition(destRect.x,destRect.y+destRect.w);
-		newGlyph->topLeft.setUV(uvRect.x, uvRect.y+uvRect.w);
-
-		newGlyph->bottomLeft.color = color;
-		newGlyph->bottomLeft.setPosition(destRect.x, destRect.y);
-		newGlyph->bottomLeft.setUV(uvRect.x, uvRect.y);
-
-		newGlyph->bottomRight.color = color;
-		newGlyph->bottomRight.setPosition(destRect.x + destRect.z, destRect.y);
-		newGlyph->bottomRight.setUV(uvRect.x + uvRect.z, uvRect.y);
-
-		newGlyph->topRight.color = color;
-		newGlyph->topRight.setPosition(destRect.x + destRect.z, destRect.y + destRect.w);
-		newGlyph->topRight.setUV(uvRect.x + uvRect.z, uvRect.y + uvRect.w);
-
-		//add new glyph to vector
-		//using pointers so only a few bytes of data will need to be sorted
-		//would normally be more because Glyph struct contains a lot of data
-		_glyphs.push_back(newGlyph);
+		//construct new glyph and add new glyph to vector
+		_glyphs.emplace_back(destRect, uvRect, texture, depth, color);
 		
 	}
 	
@@ -97,7 +76,7 @@ namespace GameEngine
 	{
 		std::vector<Vertex> vertices;
 		//reserve memory for verticies vector and resize vector to proper size
-		vertices.resize(_glyphs.size() * 6); //6 verticies per glyph
+		vertices.resize(_glyphPointers.size() * 6); //6 verticies per glyph
 		//if no glyphs, return, no batches to create
 		if (_glyphs.empty())
 		{
@@ -111,22 +90,22 @@ namespace GameEngine
 		_renderBatches.push_back(myBatch);
 		*/
 		//does everything above in 1 line of code
-		_renderBatches.emplace_back(offset, 6, _glyphs[0]->texture);
+		_renderBatches.emplace_back(offset, 6, _glyphPointers[0]->texture);
 		//set a vertex to the glyphs vertex, then increment currentVertex
-		vertices[currentVertex++] = _glyphs[0]->topLeft;
-		vertices[currentVertex++] = _glyphs[0]->bottomLeft;
-		vertices[currentVertex++] = _glyphs[0]->bottomRight;
-		vertices[currentVertex++] = _glyphs[0]->bottomRight;
-		vertices[currentVertex++] = _glyphs[0]->topRight;
-		vertices[currentVertex++] = _glyphs[0]->topLeft;
+		vertices[currentVertex++] = _glyphPointers[0]->topLeft;
+		vertices[currentVertex++] = _glyphPointers[0]->bottomLeft;
+		vertices[currentVertex++] = _glyphPointers[0]->bottomRight;
+		vertices[currentVertex++] = _glyphPointers[0]->bottomRight;
+		vertices[currentVertex++] = _glyphPointers[0]->topRight;
+		vertices[currentVertex++] = _glyphPointers[0]->topLeft;
 		offset += 6;
 		//current glyph
-		for (int cg = 1; cg < _glyphs.size(); cg++)
+		for (int cg = 1; cg < _glyphPointers.size(); cg++)
 		{
 			//only do this if current texture is different from previous texture
-			if (_glyphs[cg]->texture != _glyphs[cg - 1]->texture)
+			if (_glyphPointers[cg]->texture != _glyphPointers[cg - 1]->texture)
 			{
-				_renderBatches.emplace_back(offset, 6, _glyphs[cg]->texture);
+				_renderBatches.emplace_back(offset, 6, _glyphPointers[cg]->texture);
 			}
 			else
 			{
@@ -135,12 +114,12 @@ namespace GameEngine
 			}
 			
 			//set a vertex to the glyphs vertex, then increment currentVertex
-			vertices[currentVertex++] = _glyphs[cg]->topLeft;
-			vertices[currentVertex++] = _glyphs[cg]->bottomLeft;
-			vertices[currentVertex++] = _glyphs[cg]->bottomRight;
-			vertices[currentVertex++] = _glyphs[cg]->bottomRight;
-			vertices[currentVertex++] = _glyphs[cg]->topRight;
-			vertices[currentVertex++] = _glyphs[cg]->topLeft;
+			vertices[currentVertex++] = _glyphPointers[cg]->topLeft;
+			vertices[currentVertex++] = _glyphPointers[cg]->bottomLeft;
+			vertices[currentVertex++] = _glyphPointers[cg]->bottomRight;
+			vertices[currentVertex++] = _glyphPointers[cg]->bottomRight;
+			vertices[currentVertex++] = _glyphPointers[cg]->topRight;
+			vertices[currentVertex++] = _glyphPointers[cg]->topLeft;
 			offset += 6;
 		}
 		//create vertex buffer
@@ -194,15 +173,15 @@ namespace GameEngine
 		case GlyphSortType::BACK_TO_FRONT:
 			//guarantees that 2 equal elements will retain same order
 			//pass iterator to beginnning and end of container, and comparator
-			std::stable_sort(_glyphs.begin(), _glyphs.end(), compareBackToFront);
+			std::stable_sort(_glyphPointers.begin(), _glyphPointers.end(), compareBackToFront);
 			break;
 		case GlyphSortType::FRONT_TO_BACK:
 			
-			std::stable_sort(_glyphs.begin(), _glyphs.end(), compareFrontToBack);
+			std::stable_sort(_glyphPointers.begin(), _glyphPointers.end(), compareFrontToBack);
 			break;
 		case GlyphSortType::TEXTURE:
 		
-			std::stable_sort(_glyphs.begin(), _glyphs.end(), compareTexture);
+			std::stable_sort(_glyphPointers.begin(), _glyphPointers.end(), compareTexture);
 			break;
 		}
 		

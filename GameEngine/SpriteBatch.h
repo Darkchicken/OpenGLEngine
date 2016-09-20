@@ -13,9 +13,34 @@ namespace GameEngine
 		BACK_TO_FRONT,
 		TEXTURE		//sort by texture so all same texture gets drawn together
 	};
-
-	struct Glyph
+	//same as a struct
+	class Glyph
 	{
+	public:
+		//default constructor
+		Glyph() {};
+		//constructor with arguments
+		Glyph(const glm::vec4& destRect, const glm::vec4& uvRect, GLuint Texture, float Depth, const ColorRGBA8& color):
+			texture(Texture), 
+			depth(Depth)
+		{
+			topLeft.color = color;
+			topLeft.setPosition(destRect.x, destRect.y + destRect.w);
+			topLeft.setUV(uvRect.x, uvRect.y + uvRect.w);
+
+			bottomLeft.color = color;
+			bottomLeft.setPosition(destRect.x, destRect.y);
+			bottomLeft.setUV(uvRect.x, uvRect.y);
+
+			bottomRight.color = color;
+			bottomRight.setPosition(destRect.x + destRect.z, destRect.y);
+			bottomRight.setUV(uvRect.x + uvRect.z, uvRect.y);
+
+			topRight.color = color;
+			topRight.setPosition(destRect.x + destRect.z, destRect.y + destRect.w);
+			topRight.setUV(uvRect.x + uvRect.z, uvRect.y + uvRect.w);
+		};
+
 		GLuint texture;
 		float depth;
 
