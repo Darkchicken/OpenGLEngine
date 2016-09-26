@@ -63,7 +63,7 @@ namespace GameEngine
 		return screenCoords;
 	}
 
-	//use tile collision to check if an object can be seen by camera (for culling)
+	//use AABB tile collision to check if an object can be seen by camera (for culling)
 	//arguments are position and dimensions of colliding agent
 	bool Camera2D::isBoxInView(const glm::vec2& position, const glm::vec2 dimensions)
 	{
