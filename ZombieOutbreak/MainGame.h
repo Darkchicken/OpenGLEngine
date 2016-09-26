@@ -61,37 +61,39 @@ private:
 
 
 	//Member variables
-	GameEngine::Window _window; //creates window for game
-	GameEngine::GLSLProgram _textureProgram; //handles shaders
-	GameEngine::InputManager _inputManager; //handles input
-	GameEngine::Camera2D _camera; //handles main camera
-	GameEngine::Camera2D _hudCamera; //handles HUD camera
-	GameEngine::SpriteBatch _agentSpriteBatch; ///<draws all agents
+	GameEngine::Window m_window; //creates window for game
+	GameEngine::GLSLProgram m_textureProgram; //handles shaders
+	GameEngine::InputManager m_inputManager; //handles input
+	GameEngine::Camera2D m_camera; //handles main camera
+	GameEngine::Camera2D m_hudCamera; //handles HUD camera
+	GameEngine::SpriteBatch m_agentSpriteBatch; ///<draws all agents
 
-	GameEngine::SpriteBatch _hudSpriteBatch; ///<draws UI font
+	GameEngine::SpriteBatch m_hudSpriteBatch; ///<draws UI font
 
 	//vector of all levels in game (pointers to level object)
-	std::vector<Level*> _levels;
+	std::vector<Level*> m_levels;
 	//vector of all Humans in game (pointers to human object)
-	std::vector < Human*> _humans;
+	std::vector < Human*> m_humans;
 	//vector of all Zombies in game (pointers to zombie object)
-	std::vector < Zombie*> _zombies;
+	std::vector < Zombie*> m_zombies;
 	//vector of all bullets in game 
-	std::vector < Bullet> _bullets;
+	std::vector < Bullet> m_bullets;
 
-	Player* _player;
+	Player* m_player;
 
-	int _screenWidth, _screenHeight;
-	float _fps;
-	int _currentLevel;
+	int m_screenWidth = 1024;
+	int m_screenHeight = 768;
 
-	int _numHumansKilled; ///<humans killed by player
-	int _numZombiesKilled; ///< zombies killed by player
+	float m_fps;
+	int m_currentLevel;
 
-	GameEngine::SpriteFont* _spriteFont;
+	int m_numHumansKilled; ///<humans killed by player
+	int m_numZombiesKilled; ///< zombies killed by player
+
+	GameEngine::SpriteFont* m_spriteFont;
 
 
-	GameState _gameState;
+	GameState m_gameState;
 	
 
 
