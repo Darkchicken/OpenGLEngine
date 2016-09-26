@@ -9,14 +9,18 @@ namespace GameEngine
 	public:
 		Camera2D();
 		~Camera2D();
-		//initialize camera
 
+		//initialize camera
 		void init(int screenWidth, int screenheight);
 
 		//update camera/matrix
 		void update();
 
+		//convert the screen coordinates to world coordinates
 		glm::vec2 convertScreenToWorldCoords(glm::vec2 screenCoords);
+
+		//check if an object can be seen by camera (for culling)
+		bool isBoxInView(const glm::vec2& position, const glm::vec2 dimensions);
 
 		//setters (when these are changed, update matrix)
 		void setPosition(const glm::vec2& newPosition) { _position = newPosition; _needsMatrixUpdate = true; }

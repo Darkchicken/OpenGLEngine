@@ -62,5 +62,40 @@ namespace GameEngine
 
 		return screenCoords;
 	}
+
+	//use tile collision to check if an object can be seen by camera (for culling)
+	//arguments are position and dimensions of colliding agent
+	bool Camera2D::isBoxInView(const glm::vec2& position, const glm::vec2 dimensions)
+	{
+		//get scale of camera
+		glm::vec2 scaledScreenDimensions = glm::vec2(_screenWidth, _screenHeight)/(_scale);
+
+		//minimum x distance between agent and tile without a collision
+		const float MIN_DISTANCE_X = dimensions.x / 2.0f + scaledScreenDimensions.x/2.0f;
+		//minimum y distance between agent and tile without a collision
+		const float MIN_DISTANCE_Y = dimensions.y/2.0f + scaledScreenDimensions.y/2.0f;
+
+		//center position of the agent (from parameters)
+		glm::vec2 centerPos = position + dimensions/2.0f;
+		//center position of camera (already stored as center)
+		glm::vec2 centerCameraPos = _position;
+		//find vector between center of camera and center of agent
+		glm::vec2 distVec = centerPos - centerCameraPos;
+
+		//check x collision
+		float xDepth = MIN_DISTANCE_X - abs(distVec.x);
+		//check y collision
+		float yDepth = MIN_DISTANCE_Y - abs(distVec.y);
+
+		//if this is true, we are colliding
+		if (xDepth > 0 && yDepth > 0)
+		{
+			//notify that there was a collision
+			return true;
+			
+		}
+		//if no collision happened, return false
+		return false;
+	}
 }
 

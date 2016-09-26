@@ -528,16 +528,30 @@ void MainGame::drawGame()
 	//begin drawing agents
 	_agentSpriteBatch.begin();
 
+	//agent dimensions
+	const glm::vec2 agentDims(AGENT_RADIUS*2);
+
 	//draw all humans including player
 	for (int i = 0; i < _humans.size(); i++)
 	{
-		_humans[i]->draw(_agentSpriteBatch);
+		//if the agent is in view of the camera (for camera culling)
+		if (_camera.isBoxInView(_humans[i]->getPosition(), agentDims))
+		{
+			//draw the agent
+			_humans[i]->draw(_agentSpriteBatch);
+		}
+		
 	}
 
 	//draw all zombies 
 	for (int i = 0; i < _zombies.size(); i++)
 	{
-		_zombies[i]->draw(_agentSpriteBatch);
+		//if the agent is in view of the camera (for camera culling)
+		if (_camera.isBoxInView(_zombies[i]->getPosition(), agentDims))
+		{
+			//draw the agent
+			_zombies[i]->draw(_agentSpriteBatch);
+		}
 	}
 
 	//draw all bullets
