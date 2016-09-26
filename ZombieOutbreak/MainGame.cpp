@@ -79,9 +79,19 @@ void MainGame::initSystems()
 
 	//initialize the agent sprite batch
 	_agentSpriteBatch.init();
+	//initialize the hud sprite batch
+	_hudSpriteBatch.init();
+
+	//initialize sprite font
+	_spriteFont = new GameEngine::SpriteFont("Fonts/chintzy.ttf", 64); //< font path and 64 point render size
 
 	//initialize camera
 	_camera.init(_screenWidth, _screenHeight);
+
+	//initialize HUD camera
+	_hudCamera.init(_screenWidth, _screenHeight);
+	_hudCamera.setPosition(glm::vec2(_screenWidth/2, _screenHeight/2));
+
 
 	
 }
@@ -218,10 +228,11 @@ void MainGame::gameLoop()
 
 		//camera follows player
 		_camera.setPosition(_player->getPosition());
-
-
 		//update camera
 		_camera.update();
+
+		//update hud camera
+		_hudCamera.update();
 
 		//draw game 
 		drawGame();
@@ -566,9 +577,45 @@ void MainGame::drawGame()
 	//render all agents
 	_agentSpriteBatch.renderBatch();
 
+	//draw heads up display
+	drawHud();
+
 	_textureProgram.unuse();
 
 	//swap buffer and draw everything to screen
 	_window.swapBuffer();
+}
+
+void MainGame::drawHud()
+{
+	//char buffer to fill
+	char buffer[256];
+
+	//grab the camera matrix
+	glm::mat4 projectionMatrix = _hudCamera.getCameraMatrix();
+	GLint pUniform = _textureProgram.getUniformLocation("P");
+	glUniformMatrix4fv(pUniform, 1, GL_FALSE, &projectionMatrix[0][0]);
+
+	//begin drawing sprite batch
+	_hudSpriteBatch.begin();
+
+	//sprintf prints into a buffer instead of to screen
+	//print number of humans remaining
+	sprintf_s(buffer,"Num Humans %d", _humans.size());
+
+	_spriteFont->draw(_hudSpriteBatch, buffer, glm::vec2(0,0),
+		glm::vec2(0.5), 0.0f, GameEngine::ColorRGBA8(255,255,255,255));
+
+	//sprintf prints into a buffer instead of to screen
+	//print number of humans remaining
+	sprintf_s(buffer, "Num Zombies %d", _zombies.size());
+
+	_spriteFont->draw(_hudSpriteBatch, buffer, glm::vec2(0, 36),
+		glm::vec2(0.5), 0.0f, GameEngine::ColorRGBA8(255, 255, 255, 255));
+
+	//end drawing sprite batch
+	_hudSpriteBatch.end();
+	//render sprite batch
+	_hudSpriteBatch.renderBatch();
 }
 
