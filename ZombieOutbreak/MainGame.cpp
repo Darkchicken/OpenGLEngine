@@ -2,7 +2,7 @@
 #include <SDL/SDL.h>
 #include <GameEngine/GameEngine.h>
 #include <GameEngine/Timing.h>
-#include <GameEngine/Errors.h>
+#include <GameEngine/EngineErrors.h>
 #include <iostream>
 #include <random>
 #include <ctime>
@@ -57,7 +57,10 @@ void MainGame::run()
 	initSystems();
 	//loads level
 	initLevel();
-
+	//load level music
+	GameEngine::Music music = m_audioEngine.loadMusic("Sounds/XYZ.ogg");
+	//pass looping for music (-1 loop forever)
+	music.play(-1);
 	//begin game loop
 	gameLoop();
 	
@@ -67,6 +70,9 @@ void MainGame::initSystems()
 {
 	//initialize GameEngine
 	GameEngine::init();
+
+	//initialize sound, must happen after GameEngine.init
+	m_audioEngine.init();
 
 	//create window (window name, window width, window height, flags)
 	m_window.create("Zombie Outbreak",m_screenWidth, m_screenHeight, 0);
@@ -147,9 +153,9 @@ void MainGame::initLevel()
 
 	//set up player's guns
 	const float BULLET_SPEED = 20.0f;
-	m_player->addGun(new Gun("Magnum",10.0f, 1, 5.0f, 30.0f, BULLET_SPEED));
-	m_player->addGun(new Gun("Shotgun", 30.0f, 12, 20.0f, 4.0f, BULLET_SPEED));
-	m_player->addGun(new Gun("MP5", 2.0f, 1, 10.0f, 20.0f, BULLET_SPEED));
+	m_player->addGun(new Gun("Magnum",10.0f, 1, 5.0f, 30.0f, BULLET_SPEED,m_audioEngine.loadSoundEffect("Sounds/pistol.wav")));
+	m_player->addGun(new Gun("Shotgun", 30.0f, 12, 20.0f, 4.0f, BULLET_SPEED, m_audioEngine.loadSoundEffect("Sounds/shotgun.wav")));
+	m_player->addGun(new Gun("MP5", 2.0f, 1, 10.0f, 20.0f, BULLET_SPEED, m_audioEngine.loadSoundEffect("Sounds/cg1.wav")));
 	
 }
 

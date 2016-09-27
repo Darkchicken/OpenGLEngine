@@ -2,23 +2,24 @@
 #include<glm/glm.hpp>
 #include <string>
 #include <vector>
+#include <GameEngine/AudioEngine.h>
 
 #include "Bullet.h"
 
 class Gun
 {
 public:
-	Gun(std::string name, int fireRate, int bulletsPerShot, float spread, float bulletDamage, float bulletSpeed);
+	Gun(std::string name, int fireRate, int bulletsPerShot, float spread, 
+		float bulletDamage, float bulletSpeed, GameEngine::SoundEffect fireEffect);
 	~Gun();
 
 
-	void update(bool isMouseDown,const glm::vec2& position, const glm::vec2& direction, std::vector<Bullet>& bullets, float deltaTime);
+	void update(bool isMouseDown,const glm::vec2& position, const glm::vec2& direction, 
+		std::vector<Bullet>& bullets, float deltaTime);
 	
-
-
-
-
 private:
+
+	GameEngine::SoundEffect m_fireEffect;///< the sound effect for this gun firing
 
 	void fire(const glm::vec2& position, const glm::vec2& direction, std::vector<Bullet>& bullets);
 

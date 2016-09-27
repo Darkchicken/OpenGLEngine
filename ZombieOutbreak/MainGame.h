@@ -6,6 +6,7 @@
 #include <GameEngine/InputManager.h>
 #include <GameEngine/SpriteBatch.h>
 #include <GameEngine/SpriteFont.h>
+#include <GameEngine/AudioEngine.h>
 
 #include <vector>
 
@@ -92,6 +93,7 @@ private:
 
 	GameEngine::SpriteFont* m_spriteFont;
 
+	GameEngine::AudioEngine m_audioEngine;
 
 	GameState m_gameState;
 	

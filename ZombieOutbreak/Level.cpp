@@ -1,6 +1,6 @@
 #include "Level.h"
 
-#include <GameEngine/Errors.h>
+#include <GameEngine/EngineErrors.h>
 #include <GameEngine/ResourceManager.h>
 
 #include <fstream>

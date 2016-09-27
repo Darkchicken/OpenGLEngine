@@ -4,20 +4,24 @@
 #include <glm/gtx/rotate_vector.hpp>
 
 
-Gun::Gun(std::string name, int fireRate, int bulletsPerShot, float spread, float bulletDamage, float bulletSpeed) :
+Gun::Gun(std::string name, int fireRate, int bulletsPerShot, float spread, 
+	float bulletDamage, float bulletSpeed, GameEngine::SoundEffect fireEffect) :
 	_name(name),
 	_fireRate(fireRate),
 	_bulletsPerShot(bulletsPerShot),
 	_spread(spread),
 	_bulletDamage(bulletDamage),
 	_bulletSpeed(bulletSpeed),
-	_frameCounter(0)
+	_frameCounter(0),
+	m_fireEffect(fireEffect)
 {
+	//empty
 }
 
 
 Gun::~Gun()
 {
+	//empty
 }
 
 void Gun::update(bool isMouseDown, const glm::vec2& position, const glm::vec2& direction, std::vector<Bullet>& bullets, float deltaTime)
@@ -43,6 +47,8 @@ void Gun::fire(const glm::vec2& position, const glm::vec2& direction, std::vecto
 	static std::uniform_real_distribution<float> randRotate(-_spread, _spread);
 	const float DEG_TO_RAD = 3.14159265359f / 180.0f;
 
+	//play fire sound
+	m_fireEffect.play();
 
 	//loop through number of bullets to fire per shot
 	for (int i = 0; i < _bulletsPerShot; i++)
