@@ -47,6 +47,10 @@ namespace GameEngine
 	//initialize audio
 	void AudioEngine::init()
 	{
+		if (m_isInitialized)
+		{
+			fatalError("tried to initialize audio engine twice");
+		}
 		//Parameter can be a bitwise combination of MIX_INIT_FAC,
 		//MIX_INIT_MOD, MIX_INIT_MP3, MIX_INIT_OGG
 		if (Mix_Init(MIX_INIT_MP3 | MIX_INIT_OGG) == -1)
@@ -69,6 +73,20 @@ namespace GameEngine
 		{
 			m_isInitialized = false;
 			
+			//free sound effect chunks
+			for (auto& it : m_effectMap)
+			{
+				Mix_FreeChunk(it.second);
+			}
+
+			//free music
+			for (auto& it : m_musicMap)
+			{
+				Mix_FreeMusic(it.second);
+			}
+			m_effectMap.clear();
+			m_musicMap.clear();
+			Mix_CloseAudio();
 			Mix_Quit();
 		}
 	}
