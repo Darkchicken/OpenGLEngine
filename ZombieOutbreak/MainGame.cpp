@@ -3,8 +3,10 @@
 #include <GameEngine/GameEngine.h>
 #include <GameEngine/Timing.h>
 #include <GameEngine/EngineErrors.h>
+#include <GameEngine/ResourceManager.h>
 #include <iostream>
 #include <random>
+#include <glm/gtx/rotate_vector.hpp>
 #include <ctime>
 #include <algorithm>
 #include "Zombie.h"
@@ -97,6 +99,12 @@ void MainGame::initSystems()
 	//initialize HUD camera
 	m_hudCamera.init(m_screenWidth, m_screenHeight);
 	m_hudCamera.setPosition(glm::vec2(m_screenWidth/2, m_screenHeight/2));
+
+	//initialize particles
+
+	m_bloodParticleBatch = new GameEngine::ParticleBatch2D();
+	m_bloodParticleBatch->init(1000,0.05f,GameEngine::ResourceManager::getTexture("Textures/Particle.png"));
+	m_particleEngine.addParticleBatch(m_bloodParticleBatch);
 
 
 	
@@ -225,12 +233,14 @@ void MainGame::gameLoop()
 			//update bullets
 			updateBullets(deltaTime);
 
+			//update particles
+			m_particleEngine.update(deltaTime);
+
 			totalDeltaTime -= deltaTime;
 			i++;
 		}
 		
-
-		
+	
 
 		//camera follows player
 		m_camera.setPosition(m_player->getPosition());
@@ -364,6 +374,8 @@ void MainGame::updateBullets(float deltaTime)
 			//if bullet collides with a zombie
 			if (m_bullets[i].collideWithAgent(m_zombies[j]))
 			{
+				//add blood
+				addBlood(m_bullets[i].getPosition(), 5);
 
 				//damage zombie, kill it if out of health
 				//if this is true, zombie died
@@ -414,6 +426,8 @@ void MainGame::updateBullets(float deltaTime)
 				//if bullet collides with a human
 				if (m_bullets[i].collideWithAgent(m_humans[j]))
 				{
+					//add blood
+					addBlood(m_bullets[i].getPosition(), 5);
 
 					//damage human, kill it if out of health
 					//if this is true, human died
@@ -583,6 +597,10 @@ void MainGame::drawGame()
 	//render all agents
 	m_agentSpriteBatch.renderBatch();
 
+	//render particles
+	m_particleEngine.draw(&m_agentSpriteBatch);
+
+
 	//draw heads up display
 	drawHud();
 
@@ -623,5 +641,23 @@ void MainGame::drawHud()
 	m_hudSpriteBatch.end();
 	//render sprite batch
 	m_hudSpriteBatch.renderBatch();
+}
+
+void MainGame::addBlood(const glm::vec2& position, int numParticles)
+{
+	//generate random angle
+	static std::mt19937 randEngine(time(nullptr));
+	static std::uniform_real_distribution<float> randAngle(0.0f, 360.0f);//,2*M_PI );
+
+	//starting velocity
+	glm::vec2 velocity(2.0f, 0.0f);
+	//starting color
+	GameEngine::ColorRGBA8 color(255,0,0,255);
+	
+	for (int i = 0; i < numParticles; i++)
+	{
+		m_bloodParticleBatch->addParticle(position, glm::rotate(velocity, randAngle(randEngine)), color, 30.0f);
+	}
+	
 }
 

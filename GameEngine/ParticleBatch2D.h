@@ -41,11 +41,11 @@ namespace GameEngine
 
 		void update(float deltaTime);
 
-		void draw(SpriteBatch spriteBatch);
+		void draw(SpriteBatch* spriteBatch);
 
 		void addParticle(	const glm::vec2& position,
-							const ColorRGBA8& color,
 							const glm::vec2& velocity,
+							const ColorRGBA8& color,
 							float width);
 		
 	private:

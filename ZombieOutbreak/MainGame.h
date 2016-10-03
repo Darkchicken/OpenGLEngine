@@ -7,6 +7,8 @@
 #include <GameEngine/SpriteBatch.h>
 #include <GameEngine/SpriteFont.h>
 #include <GameEngine/AudioEngine.h>
+#include <GameEngine/ParticleEngine2D.h>
+#include <GameEngine/ParticleBatch2D.h>
 
 #include <vector>
 
@@ -60,6 +62,9 @@ private:
 	//draws HUD to screen
 	void drawHud();
 
+	//creates blood particle effect
+	void addBlood(const glm::vec2& position, int numParticles);
+
 
 	//Member variables
 	GameEngine::Window m_window; //creates window for game
@@ -70,6 +75,9 @@ private:
 	GameEngine::SpriteBatch m_agentSpriteBatch; ///<draws all agents
 
 	GameEngine::SpriteBatch m_hudSpriteBatch; ///<draws UI font
+
+	GameEngine::ParticleEngine2D m_particleEngine;
+	GameEngine::ParticleBatch2D* m_bloodParticleBatch;
 
 	//vector of all levels in game (pointers to level object)
 	std::vector<Level*> m_levels;

@@ -46,7 +46,7 @@ namespace GameEngine
 
 	}
 
-	void ParticleBatch2D::draw(SpriteBatch spriteBatch)
+	void ParticleBatch2D::draw(SpriteBatch* spriteBatch)
 	{
 		//standard uvRect for all textures
 		glm::vec4 uvRect(0.0f, 0.0f, 1.0f, 1.0f);
@@ -64,15 +64,15 @@ namespace GameEngine
 				glm::vec4 destRect(p.m_position.x,p.m_position.y, p.m_width, p.m_width );
 
 				//render particle
-				spriteBatch.draw(destRect,uvRect,m_texture.id, 0, p.m_color);
+				spriteBatch->draw(destRect,uvRect,m_texture.id, 0, p.m_color);
 			}
 		}
 	}
 
 
 	void ParticleBatch2D::addParticle(const glm::vec2& position,
-		const ColorRGBA8& color,
 		const glm::vec2& velocity,
+		const ColorRGBA8& color,
 		float width)
 	{
 		//find first particle not in use, set active, set variables
